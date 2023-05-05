@@ -11,5 +11,5 @@ npm install
 
 * Siempre: 
 ``
-npm start
+npm run start
 ``
