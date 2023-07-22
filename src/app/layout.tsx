@@ -18,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <h1 className="bg-blue-400">Main Layout</h1>
         <StoreProvider>{children}</StoreProvider>
       </body>
     </html>
