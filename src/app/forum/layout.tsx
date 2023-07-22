@@ -5,7 +5,7 @@ export default function RouteLayout({
 }) {
   return (
     <div>
-      <h1 className="bg-green-400">Layout Route (Opcional)</h1>
+      <h1 className="bg-green-400">Layout Forum (Opcional)</h1>
       {children}
     </div>
   );
