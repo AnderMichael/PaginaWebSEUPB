@@ -1,8 +1,7 @@
-import LoginPage from "@/auth/pages/LoginPage";
-import { posix } from "path";
+import EventsPage from "./events/page";
 
 const Home = () => {
-  return <LoginPage />;
+  return <EventsPage />;
 };
 
 export default Home;
