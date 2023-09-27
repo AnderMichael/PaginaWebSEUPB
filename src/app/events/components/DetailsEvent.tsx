@@ -19,7 +19,7 @@ const DetailsEvent: React.FC<DetailsEventProps> = ({ hour, date }) => {
           disponibles
         </h1>
       </div>
-      <button className="bg-[#087820] hover:opacity-50 text-white text-xl font-bold rounded h-1/4">
+      <button className="flex bg-[#087820] hover:opacity-50 text-white text-xl font-bold rounded h-1/4 items-center justify-center">
         REGISTRARSE
       </button>
     </div>
