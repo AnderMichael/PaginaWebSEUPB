@@ -1,5 +1,4 @@
-import LoginPage from "@/auth/pages/LoginPage";
-import { posix } from "path";
+import EventsPage from "./events/page";
 import CafeteriaPage from "./cafeteria/page";
 import OrderPage from "./cafeteria/order/page";
 
