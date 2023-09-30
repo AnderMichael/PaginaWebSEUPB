@@ -1,7 +1,7 @@
 "use client";
 
 import EventCard from "./components/EventCard";
-import events from "./data/events";
+import events from "../data/events";
 
 const EventsPage = () => {
   return (

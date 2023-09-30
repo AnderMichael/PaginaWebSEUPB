@@ -1,7 +1,8 @@
 import EventsPage from "./events/page";
+import AdminEvents from "./events_admin/page";
 
 const Home = () => {
-  return <EventsPage />;
+  return <AdminEvents />;
 };
 
 export default Home;
