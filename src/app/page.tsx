@@ -1,8 +1,9 @@
-import LoginPage from "@/auth/pages/LoginPage";
-import { posix } from "path";
+"use client";
+import PrincipalLayout from "./layout-page/PrincipalLayout";
+import "./globals.css";
 
 const Home = () => {
-  return <LoginPage />;
+  return <PrincipalLayout />;
 };
 
 export default Home;

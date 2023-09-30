@@ -1,6 +1,5 @@
 "use client";
-import { createContext, useContext, useReducer } from "react";
-import { initalValues, storeReducer } from "./storeReducer";
+import { createContext, useState } from "react";
 
 export const StoreContext = createContext({});
 
@@ -9,17 +8,27 @@ interface Props {
 }
 
 const StoreProvider = ({ children }: Props) => {
+  const [sideBarOpened, setSideBarOpened] = useState<boolean>(false);
+  const [textHeader, setTextHeader] = useState<string>("Menu del Día");
+
   return (
-    <StoreContext.Provider value={useReducer(storeReducer, initalValues)}>
+    <StoreContext.Provider
+      value={{
+        sideBarOpened,
+        setSideBarOpened,
+        textHeader,
+        setTextHeader,
+      }}
+    >
       {children}
     </StoreContext.Provider>
   );
 };
 
-export const useStore = () => {
-  return useContext<any>(StoreContext)[0];
-};
+// export const useStore = () => {
+//   return useContext<any>(StoreContext)[0];
+// };
 
-export const useDispatch = () => useContext<any>(StoreContext)[1];
+// export const useDispatch = () => useContext<any>(StoreContext)[1];
 
 export default StoreProvider;
