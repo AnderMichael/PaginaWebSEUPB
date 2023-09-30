@@ -1,0 +1,10 @@
+{
+    "platos": [
+        {
+            "id": 1,
+            "title": "Trucha a la trucha",
+            "Description": "Trucha al horno con arroz rwico, papas fritas y ensalada",
+            "Price" : 17.50
+        }
+    ]
+}
