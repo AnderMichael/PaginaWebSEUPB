@@ -1,19 +1,40 @@
+import { StoreContext } from "@/store/StoreProvider";
 import Image from "next/image";
-import React from "react";
+import React, { useContext } from "react";
 
 interface Props {
   imageUrl: string;
-  imageWidth: number;
-  imageHeight: number;
+  imageWidth: string;
+  imageHeight: string;
 }
 
 export const ImagePlate = ({ imageUrl, imageWidth, imageHeight }: Props) => {
+  // el width de la imagen debe venir en formato de 'px';
+  const context: any = useContext(StoreContext);
+
+  const WIDTH_IMAGE: number = Number(imageWidth.slice(0, -2));
+  const HEIGHT_IMAGE: number = Number(imageWidth.slice(0, -2));
+  const SRC: string = imageUrl;
+
   return (
-    <figure className={`w-[${imageWidth}] h-[${imageHeight}]`}>
+    <figure
+      className={`${
+        context.widthScreen >= 890
+          ? "rounded-tl-3xl rounded-bl-3xl"
+          : "rounded-tl-3xl rounded-tr-3xl"
+      } w-[${imageWidth}] h-[${imageHeight}]`}
+    >
       <Image
-        src={imageUrl}
+        loader={() => SRC}
+        src={SRC}
+        width={WIDTH_IMAGE}
+        height={HEIGHT_IMAGE}
         alt={""}
-        className={`w-[${imageWidth}] h-[${imageHeight}]`}
+        className={`${
+          context.widthScreen >= 890
+            ? "rounded-tl-3xl rounded-bl-3xl"
+            : "rounded-tl-3xl rounded-tr-3xl"
+        } w-[${imageWidth}] h-[${imageHeight}]`}
       />
     </figure>
   );

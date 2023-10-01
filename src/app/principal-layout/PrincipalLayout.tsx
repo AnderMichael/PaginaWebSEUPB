@@ -3,6 +3,7 @@ import React from "react";
 import { HeaderMenu } from "./components/HeaderMenu";
 import { SideBarMenu } from "./components/SideBarMenu";
 import { Outlet } from "react-router-dom";
+import { MenuPage } from "../cafeteria/menu/MenuPage";
 
 export const PrincipalLayout = () => {
   return (
@@ -13,11 +14,12 @@ export const PrincipalLayout = () => {
           font-family: "Jost", sans-serif;
         }
       `}</style>
-      <div className="flex flex-col bg-slate-50 h-full w-full">
+      <div className="flex flex-col bg-slate-50 h-max w-full">
         <HeaderMenu />
-        <div className="flex flex-row justify-start">
+        <div className={`flex flex-row justify-start`}>
           <SideBarMenu />
-          <Outlet />
+          <MenuPage />
+          {/* <Outlet /> */}
         </div>
       </div>
     </>
