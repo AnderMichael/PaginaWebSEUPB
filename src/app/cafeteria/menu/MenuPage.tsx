@@ -1,3 +1,4 @@
+"use client";
 import React, { useContext, useEffect } from "react";
 import { ListPlatesCards } from "./components/ListPlatesCards";
 import { StoreContext } from "@/store/StoreProvider";

@@ -1,8 +1,10 @@
+import { MenuPage } from "./menu/MenuPage";
+
 const CafeteriaPage = () => {
     return (
-      <div>
-        <h1>CafeteriaPage</h1>
-      </div>
+      <>
+       <MenuPage/> 
+      </>
     );
   };
   

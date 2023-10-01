@@ -4,14 +4,13 @@ import CafeteriaPage from "./cafeteria/page";
 import OrderPage from "./cafeteria/order/page";
 
 const Home = () => {
-  // return (
+  return (
     <>
     <div className="top-0 bottom-0 left-0 right-0">
-      <OrderPage/>
+      <PrincipalLayout/>
     </div>
     </>
   );
-  return <PrincipalLayout />;
 };
 
 export default Home;
