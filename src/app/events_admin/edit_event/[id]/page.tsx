@@ -14,7 +14,7 @@ interface TokenProps {
 const EditEvent = ({ params, searchParams }: TokenProps) => {
   const router = useRouter();
   const [{ data: eventData, loading, error }] = useAxios(
-    `http://localhost:3000/events/${params.id}`
+    `${process.env.LOCAL_API}/events/${params.id}`
   );
 
   if (loading) return <p>Loading...</p>;

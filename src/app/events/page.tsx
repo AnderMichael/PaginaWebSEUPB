@@ -6,12 +6,12 @@ import useAxios from "axios-hooks";
 
 const EventsPage = () => {
   const [{ data: events, loading, error }, refetch] = useAxios(
-    "http://localhost:3000/events"
+    `${process.env.LOCAL_API}/events`
   );
-  
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error!</p>;
-  
+
   return (
     <div className="flex absolute inset-0">
       <div className="flex flex-1 flex-col">
@@ -20,7 +20,7 @@ const EventsPage = () => {
         </div>
         <div className="flex-col overflow-y-auto h-[90%]">
           {events.map((ev: EventUPB) => (
-            <EventCard eventData={ev} />
+            <EventCard eventData={ev} key={ev.id} />
           ))}
         </div>
       </div>

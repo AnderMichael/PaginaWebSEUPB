@@ -16,7 +16,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
 }) => {
   const [{ loading }, executeDelete] = useAxios(
     {
-      url: `http://localhost:3000/events/${event?.id}`,
+      url: `${process.env.LOCAL_API}/events/${event?.id}`,
       method: "DELETE",
     },
     { manual: true }

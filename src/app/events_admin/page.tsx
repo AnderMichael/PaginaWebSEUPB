@@ -58,7 +58,7 @@ const AdminEvents = () => {
   }, [router]);
 
   const [{ data: events, loading, error }, refetch] = useAxios(
-    "http://localhost:3000/events"
+    `${process.env.LOCAL_API}/events`
   );
 
   const [eventToDelete, setEventToDelete] = useState(null);
