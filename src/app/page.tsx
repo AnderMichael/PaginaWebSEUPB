@@ -1,14 +1,14 @@
 import EventsPage from "./events/page";
-import AdminEvents from "./events_admin/page";
+import { PrincipalLayout } from "./principal-layout/PrincipalLayout";
+import CafeteriaPage from "./cafeteria/page";
+import OrderPage from "./cafeteria/order/page";
 
 const Home = () => {
   return (
     <>
-      <div>
-        Copia y pega el siguiente link:
-        <br />
-        localhost:3000/events_admin
-      </div>
+    <div className="top-0 bottom-0 left-0 right-0">
+      <PrincipalLayout/>
+    </div>
     </>
   );
 };
