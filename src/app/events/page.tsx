@@ -12,7 +12,7 @@ const EventsPage = () => {
         </div>
         <div className="flex-col overflow-y-auto h-[90%]">
           {events.map((ev) => (
-            <EventCard eventData={ev} />
+            <EventCard key={ev.name} eventData={ev} />
           ))}
         </div>
       </div>
