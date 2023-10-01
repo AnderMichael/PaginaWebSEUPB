@@ -1,15 +1,15 @@
 import React from "react";
-
+import EventUPB from "../../types/EventUPB";
 import TitleCard from "./TitleCard";
 import DescriptionEvent from "./DescriptionEvent";
 import DetailsEvent from "./DetailsEvent";
-import EventUPB from "../types/EventUPB";
 
 interface EventCardProps {
   eventData: EventUPB;
+  deleteMethod: (eventData: EventUPB) => void;
 }
 
-const EventCard: React.FC<EventCardProps> = ({ eventData }) => {
+const EventCard: React.FC<EventCardProps> = ({ eventData, deleteMethod }) => {
   return (
     <div className="flex mx-7 my-4 bg-[#E2F7ED] min-[541px]:h-[30%] max-[541px]:h-[100%] rounded-xl overflow-hidden max-[541px]:flex-col shadow-lg">
       <div className="flex flex-1 min-[541px]:w-[30%] max-[541px]:h-[40%] justify-center">
@@ -25,12 +25,7 @@ const EventCard: React.FC<EventCardProps> = ({ eventData }) => {
             <DescriptionEvent description={eventData.description} />
           </div>
           <div className="min-[541px]:w-[45%] max-[541px]:h-[45%] min-[541px]:overflow-y-auto">
-            <DetailsEvent
-              hour={eventData.hour}
-              date={eventData.date}
-              hasLink={eventData.hasLink}
-              linkForm={eventData.linkForm}
-            />
+            <DetailsEvent hour={eventData.hour} date={eventData.date} eventData={eventData} deleteMethod={deleteMethod} />
           </div>
         </div>
       </div>
