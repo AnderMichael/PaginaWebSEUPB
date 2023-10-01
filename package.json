@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -13,14 +13,18 @@
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
+    "axios": "^1.5.1",
+    "axios-hooks": "^5.0.0",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
     "flowbite": "^1.7.0",
     "flowbite-react": "^0.5.0",
+    "json-server": "^0.17.4",
     "next": "13.4.10",
     "postcss": "8.4.26",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.46.2",
     "react-router-dom": "^6.14.2",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6"
