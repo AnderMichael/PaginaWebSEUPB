@@ -1,5 +1,5 @@
 "use client";
-import { PlatesTypes } from "@/app/cafeteria/menu/types/platesType";
+import { PlatesTypes } from "@/app/home/cafeteria/menu/types/platesType";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export const StoreContext = createContext({});
@@ -10,7 +10,7 @@ interface Props {
 
 const StoreProvider = ({ children }: Props) => {
   const [sideBarOpened, setSideBarOpened] = useState<boolean>(false);
-  const [textHeader, setTextHeader] = useState<string>("Menu del Día");
+  const [textHeader, setTextHeader] = useState<string>("Cafeteria");
 
   const [widthScreen, setWidthScreen] = useState<number>(0);
   const [heightScreen, setHeightScreen] = useState<number>(0);

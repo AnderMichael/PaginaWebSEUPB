@@ -1,11 +1,13 @@
 "use client";
-import React from "react";
+import React, { ReactElement } from "react";
 import { HeaderMenu } from "./components/HeaderMenu";
 import { SideBarMenu } from "./components/SideBarMenu";
-import { Outlet } from "react-router-dom";
-import { MenuPage } from "../cafeteria/menu/MenuPage";
 
-export const PrincipalLayout = () => {
+export const PrincipalLayout = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   return (
     <>
       <style jsx>{`
@@ -18,8 +20,7 @@ export const PrincipalLayout = () => {
         <HeaderMenu />
         <div className={`flex flex-row justify-start`}>
           <SideBarMenu />
-          <MenuPage />
-          {/* <Outlet /> */}
+          {children}
         </div>
       </div>
     </>

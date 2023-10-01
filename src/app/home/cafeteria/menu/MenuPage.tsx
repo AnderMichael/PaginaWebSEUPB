@@ -15,10 +15,13 @@ export const MenuPage = () => {
     }
   }, []);
   return (
-    <main
-      className={`absolute right-0 flex flex-row justify-center h-[${context.menuPageHeight}px]`}
-    >
-      <ListPlatesCards />
+    <main className={`flex absolute inset-0`}>
+      <section className="w-full flex flex-col justify-center items-center">
+        <div className="flex h-[60px] bg-[#4752B7] items-center max-[541px]:justify-center px-7 ">
+          <h1 className="text-white text-4xl font-bold">Cafeteria</h1>
+        </div>
+        <ListPlatesCards />
+      </section>
     </main>
   );
 };

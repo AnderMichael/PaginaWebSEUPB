@@ -23,7 +23,7 @@ export const PlateCard = ({ plate }: Props) => {
   const smallerThan: boolean = context.widthScreen < 890;
 
   return (
-    <section className="flex flex-row m-5">
+    <section className="flex flex-row m-5 w-max">
       <div
         className={`flex shadow-lg rounded-3xl
         ${biggerEqualThan ? "w-[700px] h-[250px]" : "w-[250px] h-[700px]"}
@@ -94,6 +94,18 @@ export const PlateCard = ({ plate }: Props) => {
           buttonText={"Reservar plato"}
           action={() => context.setDataPlateToReserve(plate)}
         />
+      )}
+      {biggerEqualThan && !plateAvailable && (
+        <div
+          className={`${
+            biggerEqualThan
+              ? "p-3 ml-3 rounded-lg w-max h-max"
+              : "p-1 w-full rounded-bl-3xl rounded-br-3xl"
+          }  text-center
+        text-transparent text-lg font-medium`}
+        >
+          Reservar plato
+        </div>
       )}
     </section>
   );
