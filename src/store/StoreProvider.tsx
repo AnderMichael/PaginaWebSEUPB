@@ -1,6 +1,7 @@
 "use client";
 import { PlatesTypes } from "@/app/home/cafeteria/menu/types/platesType";
 import { createContext, useContext, useEffect, useState } from "react";
+import { json } from "stream/consumers";
 
 export const StoreContext = createContext({});
 
@@ -10,7 +11,11 @@ interface Props {
 
 const StoreProvider = ({ children }: Props) => {
   const [sideBarOpened, setSideBarOpened] = useState<boolean>(false);
-  const [textHeader, setTextHeader] = useState<string>("Cafeteria");
+  const [textHeader, setTextHeader] = useState<string>(
+    localStorage.getItem("headerTitle")
+      ? JSON.parse(localStorage.getItem("headerTitle") || "{}").headerTitle
+      : ""
+  );
 
   const [widthScreen, setWidthScreen] = useState<number>(0);
   const [heightScreen, setHeightScreen] = useState<number>(0);
@@ -24,6 +29,9 @@ const StoreProvider = ({ children }: Props) => {
     plateDescription: "",
     plateImage: "",
   });
+
+  const [generalLoading, setGeneralLoading] = useState<boolean>(false);
+  const [generalError, setGeneralError] = useState<boolean>(false);
 
   const handleResize = () => {
     if (typeof window !== "undefined") {
@@ -71,6 +79,10 @@ const StoreProvider = ({ children }: Props) => {
         setDataPlateToReserve,
         menuPageHeight,
         setMenuPageHeight,
+        generalLoading,
+        setGeneralLoading,
+        generalError,
+        setGeneralError,
       }}
     >
       {children}

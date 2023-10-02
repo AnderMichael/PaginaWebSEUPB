@@ -14,7 +14,7 @@ interface TokenProps {
 const EditEvent = ({ params, searchParams }: TokenProps) => {
   const router = useRouter();
   const [{ data: eventData, loading, error }] = useAxios(
-    `${process.env.LOCAL_API}/events/${params.id}`
+    `${process.env.NEXT_PUBLIC_LOCAL_API}/events/${params.id}`
   );
 
   if (loading) return <p>Loading...</p>;
@@ -39,8 +39,6 @@ const EditEvent = ({ params, searchParams }: TokenProps) => {
         <div className="flex h-[90%] justify-center overflow-y-auto m-5">
           <EventForm eventData={eventData} />
         </div>
-
-        
       </div>
     </div>
   );

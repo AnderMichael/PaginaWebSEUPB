@@ -19,7 +19,7 @@ const EventForm = ({ eventData }: EventFormProps) => {
 
   const [{ loading: putLoading, error: putError }, executePut] = useAxios(
     {
-      url: `${process.env.LOCAL_API}/events/${eventData.id}`,
+      url: `${process.env.NEXT_PUBLIC_LOCAL_API}/events/${eventData.id}`,
       method: "PUT",
     },
     { manual: true }

@@ -14,7 +14,7 @@ export default function EventForm() {
 
   const [{ loading: postLoading, error: postError }, executePost] = useAxios(
     {
-      url: `${process.env.LOCAL_API}/events`,
+      url: `${process.env.NEXT_PUBLIC_LOCAL_API}/events`,
       method: "POST",
     },
     { manual: true }

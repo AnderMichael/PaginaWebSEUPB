@@ -1,16 +1,16 @@
 "use client";
 
-import EventUPB from "../types/EventUPB";
 import EventCard from "./components/EventCard";
 import useAxios from "axios-hooks";
+import EventUPB from "./types/EventUPB";
 
 const EventsPage = () => {
   const [{ data: events, loading, error }, refetch] = useAxios(
-    `${process.env.LOCAL_API}/events`
+    `${process.env.NEXT_PUBLIC_LOCAL_API}/events`
   );
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error!</p>;
+  if (loading) return <p>Loading</p>;
+  if (error) return <p>Error</p>;
 
   return (
     <div className="flex absolute inset-0">

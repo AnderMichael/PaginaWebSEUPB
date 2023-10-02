@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "next lint",
-    "backend": "json-server --watch src/data/db.json --port 3010"
+    "backend": "json-server --watch src/data/db.json --port 3000"
   },
   "dependencies": {
     "@types/node": "20.4.2",
