@@ -1,8 +1,10 @@
+"use client";
 import { StoreContext } from "@/store/StoreProvider";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { ImagePlate } from "./ImagePlate";
 import { ButtonSavePlate } from "./ButtonSavePlate";
 import { PlatesTypes } from "../types/platesType";
+import { useRouter } from "next/navigation";
 
 interface Props {
   plate: PlatesTypes;
@@ -17,10 +19,17 @@ export const PlateCard = ({ plate }: Props) => {
     plateImage,
   } = plate;
 
+  const router = useRouter();
+
   const context: any = useContext(StoreContext);
 
   const biggerEqualThan: boolean = context.widthScreen >= 890;
   const smallerThan: boolean = context.widthScreen < 890;
+
+  const makeReservation = () => {
+    context.setDataPlateToReserve(plate);
+    router.push("/home/cafeteria/order");
+  };
 
   return (
     <section className="flex flex-row m-5 w-max">
@@ -81,7 +90,7 @@ export const PlateCard = ({ plate }: Props) => {
               {smallerThan && plateAvailable && (
                 <ButtonSavePlate
                   buttonText={"Reservar plato"}
-                  action={() => context.setDataPlateToReserve(plate)}
+                  action={makeReservation}
                 />
               )}
             </div>
@@ -92,7 +101,7 @@ export const PlateCard = ({ plate }: Props) => {
       {biggerEqualThan && plateAvailable && (
         <ButtonSavePlate
           buttonText={"Reservar plato"}
-          action={() => context.setDataPlateToReserve(plate)}
+          action={makeReservation}
         />
       )}
       {biggerEqualThan && !plateAvailable && (

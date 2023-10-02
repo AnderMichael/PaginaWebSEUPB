@@ -1,6 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     "./node_modules/flowbite-react/**/*.js",
@@ -16,7 +14,7 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       fontFamily: {
-        'cabin': ["Cabin"]
+        cabin: ["cabin"]
       }
     },
   },
