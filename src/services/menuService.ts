@@ -5,11 +5,11 @@ export const getMenu = async () => {
   };
 
   
-  export const addMenu = async (event) => {
+  export const addMenu = async (event:any) => {
     return await organizerMenuAPI.post("/", event);
   };
 
   
-  export const getMenuById = async (id) => {
+  export const getMenuById = async (id:any) => {
     return await organizerMenuAPI.get(`/${id}`);
   };

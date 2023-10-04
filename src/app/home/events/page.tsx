@@ -3,11 +3,42 @@
 import EventCard from "./components/EventCard";
 import useAxios from "axios-hooks";
 import EventUPB from "./types/EventUPB";
+import { EventInterface } from "@/models/eventModel";
+import { useEffect, useState } from "react";
+import { getEventsFS } from "@/firestore/events";
 
 const EventsPage = () => {
-  const [{ data: events, loading, error }, refetch] = useAxios(
-    `${process.env.NEXT_PUBLIC_LOCAL_API}/events`
-  );
+  // const [{ data: events, loading, error }, refetch] = useAxios(
+  //   `${process.env.NEXT_PUBLIC_LOCAL_API}/events`
+  // );
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [events, setEvents] = useState<EventInterface[]>([]);
+
+  const getDataFromDB = async () => {
+    try {
+      setLoading(true);
+      const data = await getEventsFS();
+      if (data !== null) {
+        setEvents(data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      } else {
+        setLoading(false);
+        setError(true);
+      }
+    } catch (err) {
+      setLoading(false);
+      setError(true);
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getDataFromDB();
+  }, []);
 
   if (loading) return <p>Loading</p>;
   if (error) return <p>Error</p>;
@@ -19,7 +50,7 @@ const EventsPage = () => {
           <h1 className="text-white text-4xl font-bold">Eventos</h1>
         </div>
         <div className="flex-col overflow-y-auto h-[90%]">
-          {events.map((ev: EventUPB) => (
+          {events.map((ev: EventInterface) => (
             <EventCard eventData={ev} key={ev.id} />
           ))}
         </div>

@@ -1,14 +1,14 @@
-import EventUPB from "@/app/types/EventUPB";
 import EditIcon from "@/assets/EditIcon";
 import TrashIcon from "@/assets/TrashIcon";
+import { EventInterface } from "@/models/eventModel";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 interface DetailsEventProps {
   hour: string;
   date: string;
-  eventData: EventUPB;
-  deleteMethod: (eventData: EventUPB) => void;
+  eventData: EventInterface;
+  deleteMethod: (eventData: EventInterface) => void;
 }
 
 const DetailsEvent: React.FC<DetailsEventProps> = ({
@@ -37,7 +37,7 @@ const DetailsEvent: React.FC<DetailsEventProps> = ({
             eventData.hasLink ? "text-lime-700" : "text-red-700"
           }`}
         >
-          {eventData.hasLink? "Con Registro": "Sin Registro"}
+          {eventData.hasLink ? "Con Registro" : "Sin Registro"}
         </h1>
       </div>
       <div className="flex min-[541px]:flex-col justify-around">

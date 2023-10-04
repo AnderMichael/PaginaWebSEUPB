@@ -3,10 +3,11 @@ import EventUPB from "../../types/EventUPB";
 import TitleCard from "./TitleCard";
 import DescriptionEvent from "./DescriptionEvent";
 import DetailsEvent from "./DetailsEvent";
+import { EventInterface } from "@/models/eventModel";
 
 interface EventCardProps {
-  eventData: EventUPB;
-  deleteMethod: (eventData: EventUPB) => void;
+  eventData: EventInterface;
+  deleteMethod: (eventData: EventInterface) => void;
 }
 
 const EventCard: React.FC<EventCardProps> = ({ eventData, deleteMethod }) => {
@@ -25,7 +26,12 @@ const EventCard: React.FC<EventCardProps> = ({ eventData, deleteMethod }) => {
             <DescriptionEvent description={eventData.description} />
           </div>
           <div className="min-[541px]:w-[45%] max-[541px]:h-[45%] min-[541px]:overflow-y-auto">
-            <DetailsEvent hour={eventData.hour} date={eventData.date} eventData={eventData} deleteMethod={deleteMethod} />
+            <DetailsEvent
+              hour={eventData.hour}
+              date={eventData.date}
+              eventData={eventData}
+              deleteMethod={deleteMethod}
+            />
           </div>
         </div>
       </div>

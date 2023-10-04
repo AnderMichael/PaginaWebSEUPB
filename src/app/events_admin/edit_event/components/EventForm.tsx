@@ -4,9 +4,11 @@ import useAxios from "axios-hooks";
 import { useRouter } from "next/navigation";
 import EventUPB from "@/app/types/EventUPB";
 import { useState } from "react";
+import { EventInterface } from "@/models/eventModel";
+import { updateEventFS } from "@/firestore/events";
 
 interface EventFormProps {
-  eventData: EventUPB;
+  eventData: EventInterface;
 }
 
 const EventForm = ({ eventData }: EventFormProps) => {
@@ -17,34 +19,44 @@ const EventForm = ({ eventData }: EventFormProps) => {
     register,
   } = useForm();
 
-  const [{ loading: putLoading, error: putError }, executePut] = useAxios(
-    {
-      url: `${process.env.NEXT_PUBLIC_LOCAL_API}/events/${eventData.id}`,
-      method: "PUT",
-    },
-    { manual: true }
-  );
+  const [putLoading, setPutLoading] = useState<boolean>(false);
+  const [putError, setPutError] = useState<boolean>(false);
+
+  // const [{ loading: putLoading, error: putError }, executePut] = useAxios(
+  //   {
+  //     url: `${process.env.NEXT_PUBLIC_LOCAL_API}/events/${eventData.id}`,
+  //     method: "PUT",
+  //   },
+  //   { manual: true }
+  // );
 
   const router = useRouter();
   const [cancel, setCancel] = useState(false);
   const onSubmit = async (data: any) => {
     if (!cancel) {
       try {
-        const response = await executePut({
-          data: {
-            name: data.eventName,
-            description: data.eventDescription,
-            date: data.eventDate,
-            hour: data.eventTime,
-            img: "img0.porlomientras",
-            linkForm: data.registrationLink ? data.linkForm : "",
-            hasLink: data.registrationLink,
-          },
+        setPutLoading(true);
+        const response = await updateEventFS({
+          id: eventData.id,
+          name: data.eventName,
+          description: data.eventDescription,
+          date: data.eventDate,
+          hour: data.eventTime,
+          img: "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+          linkForm: data.registrationLink ? data.linkForm : "",
+          hasLink: data.registrationLink,
         });
-        console.log(response);
-        router.replace("/events_admin?added");
+        setPutLoading(false);
+        if (!response) {
+          router.replace("/events_admin?added");
+        } else {
+          setPutError(true);
+          router.replace("/events_admin?error");
+        }
       } catch (err) {
+        setPutLoading(false);
         console.error(err);
+        setPutError(true);
         router.replace("/events_admin?error");
       }
     }

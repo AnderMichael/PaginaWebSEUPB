@@ -4,19 +4,17 @@ import TitleCard from "./TitleCard";
 import DescriptionEvent from "./DescriptionEvent";
 import DetailsEvent from "./DetailsEvent";
 import EventUPB from "../types/EventUPB";
+import { EventInterface } from "@/models/eventModel";
 
 interface EventCardProps {
-  eventData: EventUPB;
+  eventData: EventInterface;
 }
 
 const EventCard: React.FC<EventCardProps> = ({ eventData }) => {
   return (
     <div className="flex mx-7 my-4 bg-[#E2F7ED] min-[541px]:h-[30%] max-[541px]:h-[100%] rounded-xl overflow-hidden max-[541px]:flex-col shadow-lg">
       <div className="flex flex-1 min-[541px]:w-[30%] max-[541px]:h-[40%] justify-center">
-        <img
-          className="h-full"
-          src="https://scontent.flpb3-2.fna.fbcdn.net/v/t39.30808-6/327326673_567893995211980_3063958075022409817_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=a2f6c7&_nc_ohc=9G9eyf_dNsYAX-zmZOZ&_nc_ht=scontent.flpb3-2.fna&oh=00_AfA9Fkrf4TZVcUOfP388LFSFtGzF2UIqZvK69cBpVanemA&oe=651E1E43"
-        />
+        <img className="h-full" src={eventData.img} />
       </div>
       <div className="flex flex-col min-[541px]:w-[70%] max-[541px]:h-[60%]">
         <TitleCard title={eventData.name} />

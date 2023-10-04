@@ -5,6 +5,8 @@ import useAxios from "axios-hooks";
 import EventUPB from "../types/EventUPB";
 import { useEffect, useState } from "react";
 import DeleteModal from "./components/DeleteModal";
+import { EventInterface } from "@/models/eventModel";
+import { getEventsFS } from "@/firestore/events";
 
 const AdminEvents = () => {
   const router = useRouter();
@@ -57,9 +59,29 @@ const AdminEvents = () => {
     };
   }, [router]);
 
-  const [{ data: events, loading, error }, refetch] = useAxios(
-    `${process.env.NEXT_PUBLIC_LOCAL_API}/events`
-  );
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errorFinded, setErrorFinded] = useState<boolean>(false);
+  const [events, setEvents] = useState<EventInterface[]>([]);
+
+  const getDataFromDB = async () => {
+    try {
+      setLoading(true);
+      const data = await getEventsFS();
+      if (data !== null) {
+        setEvents(data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      } else {
+        setLoading(false);
+        setErrorFinded(true);
+      }
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+      setErrorFinded(true);
+    }
+  };
 
   const [eventToDelete, setEventToDelete] = useState(null);
 
@@ -67,45 +89,63 @@ const AdminEvents = () => {
     setEventToDelete(event);
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error!</p>;
-
   const createEvent = () => {
     router.push("/events_admin/add_event");
   };
 
+  useEffect(() => {
+    getDataFromDB();
+  }, []);
+
   return (
-    <div className="flex absolute inset-0">
-      <div className="flex flex-1 flex-col">
-        <div className="flex h-[10%] bg-[#2B2BB2] items-center max-[541px]:justify-center px-7">
-          <h1 className="text-white min-[541px]:text-4xl max-[541px]:text-3xl font-bold">
-            Eventos UPB - SEUPB
-          </h1>
-        </div>
-        <div className="flex h-[10%] items-center max-[541px]:justify-center px-7 shadow-lg">
-          <button
-            className="flex bg-[#3636C5] hover:opacity-50 text-white text-xl font-bold rounded h-[50%] w-auto items-center justify-center px-5 shadow-lg"
-            onClick={createEvent}
-          >
-            Crear Evento
-          </button>
-        </div>
-        <div className="flex-col overflow-y-auto h-[80%]">
-          {events.map((ev: EventUPB) => (
-            <EventCard
-              eventData={ev}
-              key={ev.id}
-              deleteMethod={promptToDelete}
+    <>
+      {loading && <p>Loading</p>}
+      {errorFinded && <p>Error</p>}
+      {!loading && !errorFinded && (
+        <div className="flex absolute inset-0">
+          <div className="flex flex-1 flex-col">
+            <div className="flex h-[10%] bg-[#2B2BB2] items-center max-[541px]:justify-center px-7">
+              <h1 className="text-white min-[541px]:text-4xl max-[541px]:text-3xl font-bold">
+                Eventos UPB - SEUPB
+              </h1>
+            </div>
+            <div className="flex h-[10%] items-center max-[541px]:justify-center px-7 shadow-lg">
+              <button
+                className="flex bg-[#3636C5] hover:opacity-50 text-white text-xl font-bold rounded h-[50%] w-auto items-center justify-center px-5 shadow-lg"
+                onClick={createEvent}
+              >
+                Crear Evento
+              </button>
+            </div>
+            <div className="flex-col overflow-y-auto h-[80%]">
+              {events.map((ev: EventInterface) => (
+                <EventCard
+                  eventData={ev}
+                  key={ev.id}
+                  deleteMethod={promptToDelete}
+                />
+              ))}
+            </div>
+            <DeleteModal
+              isOpen={!!eventToDelete}
+              event={
+                eventToDelete || {
+                  id: "",
+                  name: "",
+                  description: "",
+                  date: "",
+                  hour: "",
+                  img: "",
+                  linkForm: "",
+                  hasLink: true,
+                }
+              }
+              onClose={() => setEventToDelete(null)}
             />
-          ))}
+          </div>
         </div>
-        <DeleteModal
-          isOpen={!!eventToDelete}
-          event={eventToDelete}
-          onClose={() => setEventToDelete(null)}
-        />
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

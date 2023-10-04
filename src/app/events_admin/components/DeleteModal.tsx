@@ -1,12 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import useAxios from "axios-hooks";
+import { deleteEventFS } from "@/firestore/events";
+import { EventInterface } from "@/models/eventModel";
 
 interface DeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
-  event: any;
+  event: EventInterface;
 }
 
 const DeleteModal: React.FC<DeleteModalProps> = ({
@@ -14,21 +16,33 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   onClose,
   event,
 }) => {
-  const [{ loading }, executeDelete] = useAxios(
-    {
-      url: `${process.env.NEXT_PUBLIC_LOCAL_API}/events/${event?.id}`,
-      method: "DELETE",
-    },
-    { manual: true }
-  );
+  // const [{ loading }, executeDelete] = useAxios(
+  //   {
+  //     url: `${process.env.NEXT_PUBLIC_LOCAL_API}/events/${event?.id}`,
+  //     method: "DELETE",
+  //   },
+  //   { manual: true }
+  // );
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleDelete = async () => {
     try {
-      await executeDelete();
+      setLoading(true);
+      const deleting = await deleteEventFS(event.id || "");
+
+      if (!deleting) {
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
       onClose();
       sessionStorage.setItem("notification", "deleted");
       window.location.reload();
     } catch (error) {
+      setLoading(false);
+      onClose();
+      sessionStorage.setItem("notification", "deleted");
+      window.location.reload();
       console.error(error);
     }
   };

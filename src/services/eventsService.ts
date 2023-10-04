@@ -5,11 +5,11 @@ export const getEvents = async () => {
   };
 
   
-  export const addEvent = async (event) => {
+  export const addEvent = async (event:any) => {
     return await organizerEventsAPI.post("/", event);
   };
 
   
-  export const getEventById = async (id) => {
+  export const getEventById = async (id:any) => {
     return await organizerEventsAPI.get(`/${id}`);
   };
