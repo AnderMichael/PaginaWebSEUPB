@@ -1,6 +1,7 @@
 "use client";
-import { PlatesTypes } from "@/app/cafeteria/menu/types/platesType";
+import { PlatesTypes } from "@/app/home/cafeteria/menu/types/platesType";
 import { createContext, useContext, useEffect, useState } from "react";
+import { json } from "stream/consumers";
 
 export const StoreContext = createContext({});
 
@@ -10,7 +11,7 @@ interface Props {
 
 const StoreProvider = ({ children }: Props) => {
   const [sideBarOpened, setSideBarOpened] = useState<boolean>(false);
-  const [textHeader, setTextHeader] = useState<string>("Menu del Día");
+  const [textHeader, setTextHeader] = useState<string>("");
 
   const [widthScreen, setWidthScreen] = useState<number>(0);
   const [heightScreen, setHeightScreen] = useState<number>(0);
@@ -24,6 +25,9 @@ const StoreProvider = ({ children }: Props) => {
     plateDescription: "",
     plateImage: "",
   });
+
+  const [generalLoading, setGeneralLoading] = useState<boolean>(false);
+  const [generalError, setGeneralError] = useState<boolean>(false);
 
   const handleResize = () => {
     if (typeof window !== "undefined") {
@@ -52,6 +56,12 @@ const StoreProvider = ({ children }: Props) => {
       setWidthScreen(window.innerWidth);
       // eslint-disable-next-line react-hooks/exhaustive-deps
       setHeightScreen(window.innerHeight);
+
+      setTextHeader(
+        localStorage.getItem("headerTitle")
+          ? JSON.parse(localStorage.getItem("headerTitle") || "{}").headerTitle
+          : ""
+      );
     }
   }, []);
 
@@ -71,6 +81,10 @@ const StoreProvider = ({ children }: Props) => {
         setDataPlateToReserve,
         menuPageHeight,
         setMenuPageHeight,
+        generalLoading,
+        setGeneralLoading,
+        generalError,
+        setGeneralError,
       }}
     >
       {children}
