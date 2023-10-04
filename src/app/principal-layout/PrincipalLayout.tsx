@@ -2,19 +2,12 @@
 import React from "react";
 import { HeaderMenu } from "./components/HeaderMenu";
 import { SideBarMenu } from "./components/SideBarMenu";
-import { Outlet } from "react-router-dom";
 import { MenuPage } from "../cafeteria/menu/MenuPage";
 
 export const PrincipalLayout = () => {
   return (
     <>
-      <style jsx>{`
-        @import url("https://fonts.googleapis.com/css2?family=Bruno+Ace&family=Jost&display=swap")
-        .Jost-Font {
-          font-family: "Jost", sans-serif;
-        }
-      `}</style>
-      <div className="flex flex-col bg-slate-50 h-max w-full">
+      <div className="flex flex-col bg-slate-50 h-max w-full font-google-font-one">
         <HeaderMenu />
         <div className={`flex flex-row justify-start`}>
           <SideBarMenu />
