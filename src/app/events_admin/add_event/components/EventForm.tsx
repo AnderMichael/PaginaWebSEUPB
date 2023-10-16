@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import useAxios from "axios-hooks";
 import { useRouter } from "next/navigation";
 import { EventInterface } from "@/models/eventModel";
 import { postEventFS } from "@/firestore/events";
@@ -18,6 +17,7 @@ export default function EventForm() {
   const [cancel, setCancel] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorFinded, setErrorFinded] = useState(false);
+  const [checkboxSelected, setCheckboxSelected] = useState<boolean>(false);
 
   const onSubmit = async (data: any) => {
     if (!cancel) {
@@ -27,9 +27,11 @@ export default function EventForm() {
           description: data.eventDescription,
           date: data.eventDate,
           hour: data.eventTime,
-          img: "img0.porlomientras",
-          linkForm: data.registrationLink ? data.linkForm : "",
-          hasLink: data.registrationLink,
+          img: "https://images.pexels.com/photos/18111272/pexels-photo-18111272/free-photo-of-slogan-on-wall.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+          linkForm: checkboxSelected ? data.linkForm : "Ningun link fue dado",
+          hasLink: data.registrationLink
+            ? data.registrationLink
+            : checkboxSelected,
         };
         setLoading(true);
         const posting = await postEventFS(response);
@@ -130,29 +132,37 @@ export default function EventForm() {
               render={({ field }) => (
                 <>
                   <div className="flex space-x-3 mb-4">
-                    <input type="checkbox" className="mt-1" {...field} />
+                    <input
+                      type="checkbox"
+                      className="mt-1"
+                      {...field}
+                      onChange={() => setCheckboxSelected(!checkboxSelected)}
+                    />
                     <label className="block font-semibold">
                       ¿Enlazar a formulario de registro?
                     </label>
                   </div>
-                  {field.value && (
-                    <>
-                      <label className="block font-semibold">
-                        Formulario de registro
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Ingresa el link de formulario de registro"
-                        className="w-full p-2 border rounded mt-1"
-                        {...register("linkForm", { required: true })}
-                      />
-                      {errors.linkForm && (
-                        <span className="text-red-500">
-                          * Este campo es obligatorio.
-                        </span>
-                      )}
-                    </>
-                  )}
+                  {field.value ||
+                    (checkboxSelected && (
+                      <>
+                        <label className="block font-semibold">
+                          Formulario de registro
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Ingresa el link de formulario de registro"
+                          className="w-full p-2 border rounded mt-1"
+                          {...register("linkForm", {
+                            required: checkboxSelected,
+                          })}
+                        />
+                        {errors.linkForm && (
+                          <span className="text-red-500">
+                            * Este campo es obligatorio.
+                          </span>
+                        )}
+                      </>
+                    ))}
                 </>
               )}
             />
