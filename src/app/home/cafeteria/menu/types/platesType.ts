@@ -5,4 +5,5 @@ export interface PlatesTypes{
   plateAvailable: boolean,
   plateDescription: string,
   plateImage: string,
+  plateQuantity: number;
 }

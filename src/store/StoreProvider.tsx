@@ -1,5 +1,6 @@
 "use client";
 import { PlatesTypes } from "@/app/home/cafeteria/menu/types/platesType";
+import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { json } from "stream/consumers";
 
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const StoreProvider = ({ children }: Props) => {
+  const pathname = usePathname();
+
   const [sideBarOpened, setSideBarOpened] = useState<boolean>(false);
   const [textHeader, setTextHeader] = useState<string>("");
 
@@ -24,6 +27,7 @@ const StoreProvider = ({ children }: Props) => {
     plateAvailable: false,
     plateDescription: "",
     plateImage: "",
+    plateQuantity: 0,
   });
 
   const [generalLoading, setGeneralLoading] = useState<boolean>(false);
@@ -57,12 +61,18 @@ const StoreProvider = ({ children }: Props) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       setHeightScreen(window.innerHeight);
 
-      setTextHeader(
-        localStorage.getItem("headerTitle")
-          ? JSON.parse(localStorage.getItem("headerTitle") || "{}").headerTitle
-          : ""
-      );
+      if (!pathname.includes("cafeteria")) {
+        setTextHeader(
+          localStorage.getItem("headerTitle")
+            ? JSON.parse(localStorage.getItem("headerTitle") || "{}")
+                .headerTitle
+            : ""
+        );
+      } else {
+        setTextHeader("cafeteria");
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // useReducer(storeReducer, initalValues)

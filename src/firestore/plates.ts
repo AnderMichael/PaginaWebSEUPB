@@ -1,7 +1,7 @@
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseConnection";
 
-const plates = collection(db,"plates");
+export const plates = collection(db,"plates");
 
 export const getPlatesFS = async () => {
   try{
@@ -25,7 +25,9 @@ export const getPlatesFS = async () => {
 
 export const updatePlateFS = async (id:string,quantity:number) => {
   try{
+    console.log(quantity);
     const newPlateQuantity:number = quantity - 1;
+    console.log(newPlateQuantity);
     const plateDoc = doc(db, "plates", id);
     let updatedPlate;
     if(newPlateQuantity === 0){

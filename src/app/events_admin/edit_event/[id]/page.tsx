@@ -54,6 +54,7 @@ const EditEvent = ({ params, searchParams }: TokenProps) => {
 
   useEffect(() => {
     getDataFromDB();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
