@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import EventCard from "./components/EventCard";
 import useAxios from "axios-hooks";
-import EventUPB from "../types/EventUPB";
+import EventUPB from "../../types/EventUPB";
 import { useEffect, useState } from "react";
 import DeleteModal from "./components/DeleteModal";
 import { EventInterface } from "@/models/eventModel";
