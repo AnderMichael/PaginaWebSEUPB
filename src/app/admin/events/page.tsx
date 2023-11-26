@@ -90,7 +90,7 @@ const AdminEvents = () => {
   };
 
   const createEvent = () => {
-    router.push("/events_admin/add_event");
+    router.push("/admin/events/add_event");
   };
 
   useEffect(() => {

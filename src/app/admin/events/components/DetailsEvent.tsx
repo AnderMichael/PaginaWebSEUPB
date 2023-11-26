@@ -24,7 +24,7 @@ const DetailsEvent: React.FC<DetailsEventProps> = ({
   };
 
   const handleEdit = () => {
-    router.push(`/events_admin/edit_event/${eventData.id}`);
+    router.push(`/admin/events/edit_event/${eventData.id}`);
   };
 
   return (
