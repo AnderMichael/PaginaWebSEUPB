@@ -1,37 +1,29 @@
 "use client";
-
 import React, { useState } from "react";
 import useAxios from "axios-hooks";
-import { deleteEventFS } from "@/firestore/events";
-import { EventInterface } from "@/models/eventModel";
+import { PlateInterface } from "@/models/plateModel";
 
 interface DeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
-  event: EventInterface;
+  plate: PlateInterface;
 }
 
 const DeleteModal: React.FC<DeleteModalProps> = ({
   isOpen,
   onClose,
-  event,
+  plate,
 }) => {
-  // const [{ loading }, executeDelete] = useAxios(
-  //   {
-  //     url: `${process.env.NEXT_PUBLIC_LOCAL_API}/events/${event?.id}`,
-  //     method: "DELETE",
-  //   },
-  //   { manual: true }
-  // );
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleDelete = async () => {
     try {
       setLoading(true);
-      const deleting = await deleteEventFS(event.id || "");
+      //const deleting = await deleteFS(plate.id || "");
+      const deleting = true;
 
       if (!deleting) {
-        setLoading(false);
+        setLoading(true);
       } else {
         setLoading(false);
       }
@@ -61,13 +53,13 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
           <p className="mb-4">¿Estás seguro de borrar este evento?</p>
 
           <div className="mb-4">
-            <strong>Nombre:</strong> {event.name}
+            <strong>Nombre:</strong> {plate.plateName}
           </div>
           <div className="mb-4">
-            <strong>Fecha:</strong> {event.date}
+            <strong>Precio:</strong> {plate.platePrice}
           </div>
           <div className="mb-4">
-            <strong>Hora:</strong> {event.hour}
+            <strong>Cantidad:</strong> {plate.plateQuantity}
           </div>
 
           <div className="flex justify-end">

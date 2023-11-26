@@ -1,3 +1,4 @@
+"use client";
 import { StoreContext } from "@/store/StoreProvider";
 import React, { useContext } from "react";
 
@@ -16,7 +17,7 @@ export const Button = ({ buttonText, action, color }: Props) => {
       className={`${
         biggerEqualThan
           ? "p-3 ml-3 rounded-lg w-max h-max"
-          : "p-1 w-full rounded-bl-3xl rounded-br-3xl"
+          : "p-1 w-full rounded-lg"
       } ${color} hover:opacity-80 text-center
       text-white text-lg font-medium`}
       onClick={action}

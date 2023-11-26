@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { PlatesTypes } from "@/app/home/cafeteria/menu/types/platesType";
 import TrashIcon from "@/assets/TrashIcon";
 import EditIcon from "@/assets/EditIcon";
+import { PlateInterface } from "@/models/plateModel";
 
 interface Props {
   plate: PlatesTypes;
+  deleteAction: (plate: any) => void;
 }
 
-export const PlateCard = ({ plate }: Props) => {
+export const PlateCard = ({ plate, deleteAction }: Props) => {
   const {
     plateName,
     platePrice,
@@ -28,6 +30,10 @@ export const PlateCard = ({ plate }: Props) => {
   const biggerEqualThan: boolean = context.widthScreen >= 890;
   const smallerThan: boolean = context.widthScreen < 890;
 
+  const setPlateToDelete = () => {
+    deleteAction(plate);
+  };
+
   return (
     <section className="flex flex-row m-5 w-max">
       <div
@@ -35,11 +41,24 @@ export const PlateCard = ({ plate }: Props) => {
         ${biggerEqualThan ? "w-[90%] h-full" : "w-full h-[90%]"}
         ${smallerThan ? "flex-col" : "flex-row"}`}
       >
-        <div className="flex flex-col w-[100px] h-full">
-          <button className="flex h-[50%] bg-[#D93939] items-center justify-center hover:opacity-80">
+        <div
+          className={`flex ${
+            smallerThan ? "flex-row w-full" : "flex-col w-[100px] h-full"
+          }`}
+        >
+          <button
+            onClick={setPlateToDelete}
+            className={`flex ${
+              smallerThan ? "w-[50%]" : "h-[50%]"
+            } bg-[#D93939] items-center justify-center hover:opacity-80`}
+          >
             <TrashIcon />
           </button>
-          <button className="flex h-[50%] bg-[#E69424] items-center justify-center hover:opacity-80 text-white">
+          <button
+            className={`flex ${
+              smallerThan ? "w-[50%]" : "h-[50%]"
+            } bg-[#E69424] items-center justify-center hover:opacity-80 text-white`}
+          >
             <EditIcon />
           </button>
         </div>

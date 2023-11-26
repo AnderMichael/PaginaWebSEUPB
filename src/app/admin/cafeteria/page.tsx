@@ -84,8 +84,8 @@ const AdminCafeteria = () => {
 
   const [plateToDelete, setPlateToDelete] = useState(null);
 
-  const promptToDelete = (event: any) => {
-    setPlateToDelete(event);
+  const promptToDelete = (plate: any) => {
+    setPlateToDelete(plate);
   };
 
   useEffect(() => {
@@ -104,11 +104,9 @@ const AdminCafeteria = () => {
                 Actualizar Menú
               </h1>
             </div>
-            <div className="flex h-[10%] items-center max-[541px]:justify-center min-[541px]:justify-between px-7 shadow-lg">
-              <h1 className="text-[#384293] min-[541px]:text-3xl max-[541px]:text-2xl font-bold">
-                Lista de Platillos
-              </h1>
-              <div className="space-x-4">
+            <div className="flex h-[15%] items-center justify-between px-7 shadow-lg">
+              <h1 className="text-[#384293] min-[541px]:text-2xl max-[541px]:text-sm font-bold">Lista de Platillos</h1>
+              <div className="flex min-[541px]:flex-row max-[541px]:flex-col max-[541px]:space-y-2 min-[541px]:space-x-4">
                 <Button
                   action={() => {}}
                   color="bg-[#2A9247]"
@@ -123,22 +121,20 @@ const AdminCafeteria = () => {
             </div>
             <div className="flex flex-col items-center overflow-y-auto h-[80%]">
               {plates.map((plate: PlateInterface) => (
-                <PlateCard plate={plate} />
+                <PlateCard plate={plate} deleteAction={promptToDelete} />
               ))}
             </div>
-
             <DeleteModal
               isOpen={!!plateToDelete}
-              event={
+              plate={
                 plateToDelete || {
-                  id: "",
-                  name: "",
-                  description: "",
-                  date: "",
-                  hour: "",
-                  img: "",
-                  linkForm: "",
-                  hasLink: true,
+                  id: "1",
+                  plateName: "Spaghetti Bolognese",
+                  platePrice: 12.99,
+                  plateQuantity: 20,
+                  plateAvailable: true,
+                  plateDescription: "Classic Italian dish with meat sauce",
+                  plateImage: "spaghetti_bolognese.jpg",
                 }
               }
               onClose={() => setPlateToDelete(null)}
