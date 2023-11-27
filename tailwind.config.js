@@ -14,7 +14,8 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       fontFamily: {
-        cabin: ["cabin"]
+        'cabin': ["cabin"],
+        'google-font-one': "url('https://fonts.googleapis.com/css2?family=Bruno+Ace&family=Jost&display=swap')"
       }
     },
   },
