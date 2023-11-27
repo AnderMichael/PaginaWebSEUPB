@@ -3,8 +3,15 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { messageOrder } from "./../data";
+import { PlateCard } from "./components/PlateCard";
 
 const OrderPage = () => {
+  const order = {
+    id:"1",
+    plateName: "platillo uno",
+    platePrice: 192,
+    plateDescription: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem veritatis architecto error excepturi! Qui nisi at beatae pariatur non velit cupiditate aperiam iusto adipisci, quibusdam mollitia possimus iure distinctio nemo?",
+  }
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState(false);
 
@@ -15,7 +22,7 @@ const OrderPage = () => {
   return (
     <>
       <div className="lg:py-20 md:py-10 lg:px-40 md:px-40 sm:p-10 left-0 right-0 top-0 bottom-0">
-        Cafe cafe
+        <PlateCard plate={order} />
         <form
           onSubmit={handleSubmit(onCheckSubmit)}
           className="flex flex-col space-y-4 md:space-y-6 text-lg  mx-10 sm:ml-10"
