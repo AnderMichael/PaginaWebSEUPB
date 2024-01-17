@@ -1,0 +1,1 @@
+export const messageOrder = "Entiendo que si no llego en el límite del tiempo establecido (5 min luego de la hora establecida), la reserva será cancelada"

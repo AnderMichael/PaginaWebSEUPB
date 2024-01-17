@@ -1,9 +1,7 @@
 "use client";
-import PrincipalLayout from "./layout-page/PrincipalLayout";
-import "./globals.css";
 
 const Home = () => {
-  return <PrincipalLayout />;
+  return <></>;
 };
 
 export default Home;
