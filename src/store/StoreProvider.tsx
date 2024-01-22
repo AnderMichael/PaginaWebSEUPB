@@ -33,6 +33,8 @@ const StoreProvider = ({ children }: Props) => {
   const [generalLoading, setGeneralLoading] = useState<boolean>(false);
   const [generalError, setGeneralError] = useState<boolean>(false);
 
+  const [orderMade, setOrderMade] = useState<boolean>(false);
+
   const handleResize = () => {
     if (typeof window !== "undefined") {
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,6 +97,8 @@ const StoreProvider = ({ children }: Props) => {
         setGeneralLoading,
         generalError,
         setGeneralError,
+        orderMade,
+        setOrderMade,
       }}
     >
       {children}

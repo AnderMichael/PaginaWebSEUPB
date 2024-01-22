@@ -2,71 +2,113 @@
 import React, { useContext, useEffect, useState } from "react";
 import { PlateCard } from "./PlateCard";
 import { StoreContext } from "@/store/StoreProvider";
-import useAxios from "axios-hooks";
 import { PlatesTypes } from "../types/platesType";
-import { getPlatesFS } from "@/firestore/plates";
+import { onValue, ref } from "firebase/database";
+import { realTimeDb } from "../../../../../firestore/firebaseConnection";
+import ModalPage from "../../../../../modals/ModalPage";
+import ModalLoading from "../../../../../modals/ModalLoading";
+import ModalMessage from "../../../../../modals/ModalMessage";
 
 export const ListPlatesCards = () => {
   const context: any = useContext(StoreContext);
 
-  // const [{ data: platesData, loading, error }, refetch] = useAxios(
-  //   `${process.env.NEXT_PUBLIC_LOCAL_API}/plates`
-  // );
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [platesData, setPlatesData] = useState<PlatesTypes[]>([]);
-
-  // console.log(platesData);
-  // if (loading) {
-  //   context.setGeneralLoading(true);
-  //   return <div>loading</div>;
-  // } else {
-  //   context.setGeneralLoading(false);
-  // }
-  // if (error) {
-  //   context.setGeneralError(true);
-  //   return <div>error</div>;
-  // } else {
-  //   context.setGeneralError(false);
-  // }
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   const getDataFromDB = async () => {
     try {
       setLoading(true);
-      const data = await getPlatesFS();
-      if (data !== null) {
-        setPlatesData(data);
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
-      } else {
-        setLoading(false);
-        setError(true);
-      }
+      const updateReference = ref(realTimeDb, "plates/");
+      onValue(
+        updateReference,
+        async (snapshot) => {
+          const data = await snapshot.val();
+          const valuesArray: PlatesTypes[] = Object.entries(data).map(
+            ([id, props]) => ({
+              id,
+              ...(props as {
+                plateName: string;
+                platePrice: number;
+                plateAvailable: boolean;
+                plateDescription: string;
+                plateImage: string;
+                plateQuantity: number;
+              }),
+            })
+          );
+          setPlatesData(valuesArray);
+          setTimeout(() => {
+            setLoading(false);
+          }, 100);
+        },
+        {
+          onlyOnce: true,
+        }
+      );
     } catch (err) {
       setLoading(false);
       setError(true);
       console.error(err);
+      setTimeout(() => {
+        setError(false);
+      }, 5000);
     }
   };
 
+  const updateReference = ref(realTimeDb, "plates/");
+  useEffect(() => {
+    setTimeout(() => {
+      onValue(updateReference, async (snapshot) => {
+        const data = await snapshot.val();
+        const valuesArray: PlatesTypes[] = Object.entries(data).map(
+          ([id, props]) => ({
+            id,
+            ...(props as {
+              plateName: string;
+              platePrice: number;
+              plateAvailable: boolean;
+              plateDescription: string;
+              plateImage: string;
+              plateQuantity: number;
+            }),
+          })
+        );
+        setPlatesData(valuesArray);
+      });
+      setRefresh(!refresh);
+    }, 30000);
+  }, [refresh]);
+
+  useEffect(() => {
+    context.setOrderMade(false);
+  }, []);
+
   useEffect(() => {
     getDataFromDB();
-  }, []);
+  }, [context.orderMade]);
 
   return (
     <>
-      {loading && (
-        <p className="flex justify-start w-full h-[90%] mt-5">Loading</p>
+      {(loading || error) && (
+        <ModalPage>
+          <>
+            {loading && <ModalLoading />}
+            {error && (
+              <ModalMessage title={"Error 404"} message={"Vuelva mas tarde"} />
+            )}
+          </>
+        </ModalPage>
       )}
-      {error && <p className="flex justify-start w-full h-[90%] mt-5">Error</p>}
       {!loading && !error && (
         <section
           className={`flex flex-row flex-wrap overflow-y-auto h-[90%] w-[${context.widthScreen}px] justify-center items-start`}
         >
-          {platesData.map((item: PlatesTypes) => (
-            <PlateCard key={item.id} plate={item} />
-          ))}
+          {platesData.length !== 0 &&
+            platesData.map((item: PlatesTypes) => (
+              <PlateCard key={item.id} plate={item} />
+            ))}
         </section>
       )}
     </>

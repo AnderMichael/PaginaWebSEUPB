@@ -10,6 +10,9 @@ import { OrderForm } from "@/models/orderModel";
 import { setReservedPlateFS } from "@/firestore/order";
 import ModalPage from "@/modals/ModalPage";
 import ModalConfirmation from "@/modals/ModalConfirmation";
+import { PlateInterface } from "../../../../models/plateModel";
+import { child, push, ref, update } from "firebase/database";
+import { realTimeDb } from "../../../../firestore/firebaseConnection";
 
 const OrderPage = () => {
   const context: any = useContext(StoreContext);
@@ -54,21 +57,35 @@ const OrderPage = () => {
         plateQuantity,
       } = context.dataPlateToReserve;
 
+      const plateGottenData = {
+        plateAvailable: plateQuantity - 1 > 0,
+        plateDescription: plateDescription,
+        plateImage: plateImage,
+        plateName: plateName,
+        platePrice: platePrice,
+        plateQuantity: plateQuantity - 1,
+      };
+
       const newOrderPlate: ReservedModelFrontend = {
         clientCode: Number(code),
         clientName: username,
         clientSchedule: String(time.start) + ":" + String(time.end),
         plateId: id,
-        plateAvailable: plateAvailable,
-        plateDescription: plateDescription,
-        plateImage: plateImage,
-        plateName: plateName,
-        platePrice: platePrice,
-        plateQuantity: plateQuantity,
+        ...plateGottenData,
       };
 
       await setReservedPlateFS(newOrderPlate);
+
+      const newPostKey = push(child(ref(realTimeDb), "plates")).key;
+
+      const updates: any = {};
+
+      updates[`/plates/${id}/${newPostKey}`] = { id: id, ...plateGottenData };
+
+      update(ref(realTimeDb), updates);
+
       alert("Platillo pedido exitosamente");
+      context.setOrderMade(true);
       router.push("/home/cafeteria");
     } else {
       setError(true);
@@ -182,7 +199,7 @@ const OrderPage = () => {
             <button
               type="button"
               className="w-1/4 text-white bg-red-500 hover:bg-red-400 active:bg-red-600 m-5
-           font-medium rounded-lg  px-5 py-2.5 text-center mt-3"
+              font-medium rounded-lg  px-5 py-2.5 text-center mt-3"
               onClick={() => {
                 router.push("/home/cafeteria");
               }}
