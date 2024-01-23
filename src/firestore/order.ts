@@ -21,3 +21,23 @@ export const setReservedPlateFS = async (order:ReservedModelFrontend) => {
     return true;
   }
 }
+
+export const getReserverPlateFS = async () => {
+  try{
+    const data = await getDocs(reserved_plates);
+    const filterData = data.docs.map((doc:any) => ({
+      ...doc.data(),
+      id: doc.id
+    }));
+    let platesGotten:any = [];
+    if(filterData){
+      platesGotten = [...filterData];
+      return platesGotten;
+    }else{
+      return null;
+    }
+  }catch(err){
+    console.error(err);
+    return null;
+  }
+}

@@ -1,5 +1,6 @@
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseConnection";
+import { PlateInterface } from "@/models/plateModel";
 
 export const plates = collection(db,"plates");
 
@@ -41,5 +42,21 @@ export const updatePlateFS = async (id:string,quantity:number) => {
   }catch(err){
     console.error(err);
     return true;
+  }
+}
+
+export const setPlateFS = async (plate:PlateInterface) => {
+  try {
+    const newPlate:PlateInterface = plate;
+
+    //const { plate_id, plate_quantity } = newPlate;
+    console.log("Sending plate");
+   // await updatePlateFS( plate_id, plate_quantity);
+    await addDoc(plates,newPlate);
+    console.log("Plate Sent");
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
   }
 }
