@@ -76,8 +76,6 @@ const OrderPage = () => {
 
       await setReservedPlateFS(newOrderPlate);
 
-      const newPostKey = push(child(ref(realTimeDb), "plates")).key;
-
       const updates: any = {};
 
       updates[`/plates/${id}`] = { ...plateGottenData };
