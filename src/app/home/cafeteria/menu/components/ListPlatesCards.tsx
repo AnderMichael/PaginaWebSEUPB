@@ -78,7 +78,7 @@ export const ListPlatesCards = () => {
         setPlatesData(valuesArray);
       });
       setRefresh(!refresh);
-    }, 30000);
+    }, 1000);
   }, [refresh]);
 
   useEffect(() => {
