@@ -92,6 +92,17 @@ const AdminCafeteria = () => {
     getDataFromDB();
   }, []);
 
+  const goToReservedPlates = () => {
+    console.log("reservar")
+    router.push("/admin/cafeteria/reservations")
+  }
+
+  const goToAddDish = () => {
+    console.log("añadir")
+    router.push("/admin/cafeteria/add_dish")
+  }
+
+
   return (
     <>
       {loading && <p>Loading</p>}
@@ -107,8 +118,13 @@ const AdminCafeteria = () => {
             <div className="flex h-[15%] items-center justify-between px-7 shadow-lg">
               <h1 className="text-[#384293] min-[541px]:text-2xl max-[541px]:text-sm font-bold">Lista de Platillos</h1>
               <div className="flex min-[541px]:flex-row max-[541px]:flex-col max-[541px]:space-y-2 min-[541px]:space-x-4">
+              <Button
+                  action={goToReservedPlates}
+                  color="bg-[#0A8D76]"
+                  buttonText="Ver platos reservados"
+                />
                 <Button
-                  action={() => {}}
+                  action={goToAddDish}
                   color="bg-[#2A9247]"
                   buttonText="+ Añadir Plato"
                 />
