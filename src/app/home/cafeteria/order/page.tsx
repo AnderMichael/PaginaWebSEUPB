@@ -80,7 +80,7 @@ const OrderPage = () => {
 
       const updates: any = {};
 
-      updates[`/plates/${id}/${newPostKey}`] = { id: id, ...plateGottenData };
+      updates[`/plates/${id}`] = { ...plateGottenData };
 
       update(ref(realTimeDb), updates);
 
