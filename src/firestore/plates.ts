@@ -1,7 +1,6 @@
-import { collection, doc, getDocs, updateDoc, onSnapshot, orderBy, query } from "firebase/firestore";
-import { db, realTimeDb } from "./firebaseConnection";
-import { getDatabase, onValue, ref, set, child } from "firebase/database";
-import { get } from "http";
+import { addDoc, collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { db } from "./firebaseConnection";
+import { PlateInterface } from "@/models/plateModel";
 
 export const plates = collection(db, "plates");
 
@@ -64,22 +63,18 @@ export const updatePlateFS = async (id: string, quantity: number) => {
   }
 }
 
-// export const getRealTimePlateFD = (id: string, setValue: any) => {
-  
-// };
+export const setPlateFS = async (plate:PlateInterface) => {
+  try {
+    const newPlate:PlateInterface = plate;
 
-
-
-// export const updateRealTimePlateFD = (id: string, quantity: number) => {
-//   getRealTimePlateFD(id, data.getData);
-
-//   if (!data) {
-//     throw new Error("id not found!");
-//   }
-
-//   const reference = ref(realTimeDb, "plates/" + id)
-
-//   set(reference, {
-//     plateQuantity: data.plateQuantity - quantity
-//   });
-// };
+    //const { plate_id, plate_quantity } = newPlate;
+    console.log("Sending plate");
+   // await updatePlateFS( plate_id, plate_quantity);
+    await addDoc(plates,newPlate);
+    console.log("Plate Sent");
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}

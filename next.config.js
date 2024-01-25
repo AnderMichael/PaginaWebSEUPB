@@ -7,7 +7,7 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/home/cafeteria',
+        destination: '/auth/login',
         permanent: true,
       },
     ]
