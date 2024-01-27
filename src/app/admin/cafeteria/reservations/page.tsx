@@ -1,6 +1,8 @@
 "use client";
+import { realTimeDb } from "@/firestore/firebaseConnection";
 import { getReserverPlateFS } from "@/firestore/order";
 import { ReservedModelBackend } from "@/models/reservedPlateModel";
+import { onValue, ref } from "firebase/database";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -9,25 +11,47 @@ const ReservationPage = () => {
   const [orders, setOrders] = useState<ReservedModelBackend[]>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  
   const getDataFromDB = async () => {
     try {
       setLoading(true);
-      const data = await getReserverPlateFS();
-      if (data !== null) {
-        setOrders(data);
-        console.log(data)
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
-      } else {
-        setLoading(false);
-        //setErrorFinded(true);
-      }
-    } catch (error) {
-      console.error(error);
+      const updateReference = ref(realTimeDb, "plates/");
+      onValue(
+        updateReference,
+        async (snapshot) => {
+          const data = await snapshot.val();
+          const valuesArray: ReservedModelBackend[] = Object.entries(data).map(
+            ([id, props]) => ({
+              id,
+              ...(props as {
+                client_code: number;
+                client_name: string;
+                client_schedule: string;
+                plate_id: string;
+                plate_available: boolean;
+                plate_description: string;
+                plate_image: string;
+                plate_name: string;
+                plate_price: number;
+                plate_quantity: number;
+              }),
+            })
+          );
+          setOrders(valuesArray);
+          setTimeout(() => {
+            setLoading(false);
+          }, 100);
+        },
+        {
+          onlyOnce: true,
+        }
+      );
+    } catch (err) {
       setLoading(false);
-     // setErrorFinded(true);
+      // setError(true);
+      console.error(err);
+      setTimeout(() => {
+        //   setError(false);
+      }, 5000);
     }
   };
 
@@ -36,7 +60,6 @@ const ReservationPage = () => {
   }, []);
   return (
     <>
-      
       <div className="container mx-auto p-4 w-[70%]">
         <div className="flex justify-between items-center m-5">
           <h1 className="text-[#302E46] my-5 text-left  text-4xl font-black font-jost ">
@@ -66,47 +89,50 @@ const ReservationPage = () => {
                   Hora de Reserva
                 </th>
                 <th colSpan={2} className="px-6 py-3 text-center">
-                    Acciones
+                  Acciones
                 </th>
               </tr>
             </thead>
             <tbody>
-              {orders && orders.map((order: ReservedModelBackend, index: number) => (
-                <tr
-                  key={index}
-                  className={index % 2 === 0 ? " bg-[#C3D9F2]" : "bg-[#EEF6FF]"}
-                >
+              {orders &&
+                orders.map((order: ReservedModelBackend, index: number) => (
+                  <tr
+                    key={index}
+                    className={
+                      index % 2 === 0 ? " bg-[#C3D9F2]" : "bg-[#EEF6FF]"
+                    }
+                  >
                     <td className="text-black text-center px-4 py-2">
-                    {order.client_code}
-                  </td>
-                  <td className="text-black text-center px-4 py-2">
-                    {order.plate_name}
-                  </td>
-                  <td className="text-black text-center px-4 py-2">
-                    {order.plate_price}
-                  </td>
-                  <td className="text-black text-center px-4 py-2">
-                    {order.client_schedule}
-                  </td>
-                  <td className="text-black text-center px-4 py-2">
-                    <button onClick={() => console.log("handleEdit(client)")}>
-                      <div className="h-5 w-5 text-[#1A4E1C] hover:text-[#173518]">
-                        Entregado
-                      </div>
-                    </button>
-                  </td>
-                  <td className="text-black text-center px-4 py-2">
-                    <button
-                      onClick={() => console.log("promptToDelete(client)")}
-                    >
-                      <div className="h-5 w-5 text-red-500 hover:text-red-700">
-                        {" "}
-                        Eliminar
-                      </div>
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                      {order.client_code}
+                    </td>
+                    <td className="text-black text-center px-4 py-2">
+                      {order.plate_name}
+                    </td>
+                    <td className="text-black text-center px-4 py-2">
+                      {order.plate_price}
+                    </td>
+                    <td className="text-black text-center px-4 py-2">
+                      {order.client_schedule}
+                    </td>
+                    <td className="text-black text-center px-4 py-2">
+                      <button onClick={() => console.log("handleEdit(client)")}>
+                        <div className="h-5 w-5 text-[#1A4E1C] hover:text-[#173518]">
+                          Entregado
+                        </div>
+                      </button>
+                    </td>
+                    <td className="text-black text-center px-4 py-2">
+                      <button
+                        onClick={() => console.log("promptToDelete(client)")}
+                      >
+                        <div className="h-5 w-5 text-red-500 hover:text-red-700">
+                          {" "}
+                          Eliminar
+                        </div>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
