@@ -11,8 +11,9 @@ import { setReservedPlateFS } from "@/firestore/order";
 import ModalPage from "@/modals/ModalPage";
 import ModalConfirmation from "@/modals/ModalConfirmation";
 import { PlateInterface } from "../../../../models/plateModel";
-import { child, push, ref, update } from "firebase/database";
+import { child, push, ref, set, update } from "firebase/database";
 import { realTimeDb } from "../../../../firestore/firebaseConnection";
+import { v4 } from "uuid";
 
 const OrderPage = () => {
   const context: any = useContext(StoreContext);
@@ -76,13 +77,24 @@ const OrderPage = () => {
 
       await setReservedPlateFS(newOrderPlate);
 
-      const newPostKey = push(child(ref(realTimeDb), "plates")).key;
-
       const updates: any = {};
 
       updates[`/plates/${id}`] = { ...plateGottenData };
 
       update(ref(realTimeDb), updates);
+
+      set(ref(realTimeDb, "reserver_plates/" + v4()), {
+        client_code: Number(code),
+        client_name: username,
+        client_schedule: String(time.start) + ":" + String(time.end),
+        plate_id: id,
+        plate_available: plateQuantity - 1 > 0,
+        plate_description: plateDescription,
+        plate_image: plateImage,
+        plate_name: plateName,
+        plate_price: platePrice,
+        plate_quantity: plateQuantity - 1,
+      });
 
       alert("Platillo pedido exitosamente");
       context.setOrderMade(true);

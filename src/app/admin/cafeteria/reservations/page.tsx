@@ -5,16 +5,23 @@ import { ReservedModelBackend } from "@/models/reservedPlateModel";
 import { onValue, ref } from "firebase/database";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { realTimeDb } from "../../../../firestore/firebaseConnection";
+import { onValue, ref } from "firebase/database";
+import ModalPage from "../../../../modals/ModalPage";
+import ModalLoading from "../../../../modals/ModalLoading";
 
 const ReservationPage = () => {
   const router = useRouter();
-  const [orders, setOrders] = useState<ReservedModelBackend[]>();
+  const [orders, setOrders] = useState<ReservedModelBackend[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
+
+  const updateReference = ref(realTimeDb, "reserved_plates/");
 
   const getDataFromDB = async () => {
     try {
       setLoading(true);
-      const updateReference = ref(realTimeDb, "plates/");
+
       onValue(
         updateReference,
         async (snapshot) => {
@@ -39,27 +46,56 @@ const ReservationPage = () => {
           setOrders(valuesArray);
           setTimeout(() => {
             setLoading(false);
-          }, 100);
+          }, 1000);
         },
         {
           onlyOnce: true,
         }
       );
-    } catch (err) {
+    } catch (error) {
+      console.error(error);
       setLoading(false);
-      // setError(true);
-      console.error(err);
-      setTimeout(() => {
-        //   setError(false);
-      }, 5000);
     }
   };
 
   useEffect(() => {
+    setTimeout(() => {
+      onValue(updateReference, async (snapshot) => {
+        const data = await snapshot.val();
+        const valuesArray: ReservedModelBackend[] = Object.entries(data).map(
+          ([id, props]) => ({
+            id,
+            ...(props as {
+              client_code: number;
+              client_name: string;
+              client_schedule: string;
+              plate_id: string;
+              plate_available: boolean;
+              plate_description: string;
+              plate_image: string;
+              plate_name: string;
+              plate_price: number;
+              plate_quantity: number;
+            }),
+          })
+        );
+        setOrders(valuesArray);
+      });
+      setRefresh(!refresh);
+    }, 1000);
+  }, [refresh]);
+
+  useEffect(() => {
     getDataFromDB();
   }, []);
+
   return (
     <>
+      {loading && (
+        <ModalPage>
+          <ModalLoading />
+        </ModalPage>
+      )}
       <div className="container mx-auto p-4 w-[70%]">
         <div className="flex justify-between items-center m-5">
           <h1 className="text-[#302E46] my-5 text-left  text-4xl font-black font-jost ">

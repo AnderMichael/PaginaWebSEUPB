@@ -6,9 +6,13 @@ import { getPlatesFS, plates } from "@/firestore/plates";
 import { PlateInterface } from "@/models/plateModel";
 import { PlateCard } from "./components/PlateCard";
 import { Button } from "./components/Button";
+import { onValue, ref } from "firebase/database";
+import { realTimeDb } from "../../../firestore/firebaseConnection";
 
 const AdminCafeteria = () => {
   const router = useRouter();
+
+  const [refresh, setRefresh] = useState<boolean>(false);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
@@ -61,20 +65,40 @@ const AdminCafeteria = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errorFinded, setErrorFinded] = useState<boolean>(false);
   const [plates, setPlates] = useState<PlateInterface[]>([]);
+  const updateReference = ref(realTimeDb, "plates/");
 
   const getDataFromDB = async () => {
     try {
       setLoading(true);
-      const data = await getPlatesFS();
-      if (data !== null) {
-        setPlates(data);
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
-      } else {
+      // const data = await getPlatesFS();
+      // if (data !== null) {
+      //   setPlates(data);
+      //   setTimeout(() => {
+      //     setLoading(false);
+      //   }, 1000);
+      // } else {
+      //   setLoading(false);
+      //   setErrorFinded(true);
+      // }
+
+      onValue(updateReference, async (snapshot) => {
+        const data = await snapshot.val();
+        const valuesArray: PlateInterface[] = Object.entries(data).map(
+          ([id, props]) => ({
+            id,
+            ...(props as {
+              plateName: string;
+              platePrice: number;
+              plateAvailable: boolean;
+              plateDescription: string;
+              plateImage: string;
+              plateQuantity: number;
+            }),
+          })
+        );
+        setPlates(valuesArray);
         setLoading(false);
-        setErrorFinded(true);
-      }
+      });
     } catch (error) {
       console.error(error);
       setLoading(false);
@@ -88,20 +112,42 @@ const AdminCafeteria = () => {
     setPlateToDelete(plate);
   };
 
+  const goToReservedPlates = () => {
+    console.log("reservar");
+    router.push("/admin/cafeteria/reservations");
+  };
+
+  const goToAddDish = () => {
+    console.log("añadir");
+    router.push("/admin/cafeteria/add_dish");
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      onValue(updateReference, async (snapshot) => {
+        const data = await snapshot.val();
+        const valuesArray: PlateInterface[] = Object.entries(data).map(
+          ([id, props]) => ({
+            id,
+            ...(props as {
+              plateName: string;
+              platePrice: number;
+              plateAvailable: boolean;
+              plateDescription: string;
+              plateImage: string;
+              plateQuantity: number;
+            }),
+          })
+        );
+        setPlates(valuesArray);
+      });
+      setRefresh(!refresh);
+    }, 1000);
+  }, [refresh]);
+
   useEffect(() => {
     getDataFromDB();
   }, []);
-
-  const goToReservedPlates = () => {
-    console.log("reservar")
-    router.push("/admin/cafeteria/reservations")
-  }
-
-  const goToAddDish = () => {
-    console.log("añadir")
-    router.push("/admin/cafeteria/add_dish")
-  }
-
 
   return (
     <>
@@ -116,9 +162,11 @@ const AdminCafeteria = () => {
               </h1>
             </div>
             <div className="flex h-[15%] items-center justify-between px-7 shadow-lg">
-              <h1 className="text-[#384293] min-[541px]:text-2xl max-[541px]:text-sm font-bold">Lista de Platillos</h1>
+              <h1 className="text-[#384293] min-[541px]:text-2xl max-[541px]:text-sm font-bold">
+                Lista de Platillos
+              </h1>
               <div className="flex min-[541px]:flex-row max-[541px]:flex-col max-[541px]:space-y-2 min-[541px]:space-x-4">
-              <Button
+                <Button
                   action={goToReservedPlates}
                   color="bg-[#0A8D76]"
                   buttonText="Ver platos reservados"
