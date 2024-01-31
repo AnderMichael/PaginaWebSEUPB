@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import useAxios from "axios-hooks";
 import { PlateInterface } from "@/models/plateModel";
+import { ref, remove } from "firebase/database";
+import { realTimeDb } from "../../../../firestore/firebaseConnection";
 
 interface DeleteModalProps {
   isOpen: boolean;
@@ -19,14 +20,8 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   const handleDelete = async () => {
     try {
       setLoading(true);
-      //const deleting = await deleteFS(plate.id || "");
-      const deleting = true;
-
-      if (!deleting) {
-        setLoading(true);
-      } else {
-        setLoading(false);
-      }
+      await remove(ref(realTimeDb, "plates/" + plate.id));
+      setLoading(false);
       onClose();
       sessionStorage.setItem("notification", "deleted");
       window.location.reload();
@@ -53,13 +48,17 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
           <p className="mb-4">¿Estás seguro de borrar este evento?</p>
 
           <div className="mb-4">
-            <strong>Nombre:</strong> {plate.plateName}
+            <p><strong>Nombre:</strong> {plate.plateName}</p>
           </div>
           <div className="mb-4">
+            <p>
             <strong>Precio:</strong> {plate.platePrice}
+            </p>
           </div>
           <div className="mb-4">
+            <p>
             <strong>Cantidad:</strong> {plate.plateQuantity}
+            </p>
           </div>
 
           <div className="flex justify-end">

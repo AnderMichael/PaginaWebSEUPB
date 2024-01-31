@@ -23,8 +23,6 @@ export const PlateCard = ({ plate, deleteAction }: Props) => {
     plateQuantity,
   } = plate;
 
-  const router = useRouter();
-
   const context: any = useContext(StoreContext);
 
   const biggerEqualThan: boolean = context.widthScreen >= 890;
