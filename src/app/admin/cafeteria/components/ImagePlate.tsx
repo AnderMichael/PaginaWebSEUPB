@@ -19,7 +19,7 @@ export const ImagePlate = ({ imageUrl }: Props) => {
           : "rounded-tr-3xl rounded-br-3xl"
       } w-[250px]`}
     >
-      <img src={SRC} className="w-[250px] h-full" />
+      <Image style={{height: '100%'}} loader={() => SRC} src={SRC} alt={"image"} width={250} height={0}/>
     </figure>
   );
 };

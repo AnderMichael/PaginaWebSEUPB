@@ -14,6 +14,7 @@ export const MenuPage = () => {
       context.setHeightScreen(window.innerHeight);
       context.setMenuPageHeight(window.innerHeight - 80 || 400);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

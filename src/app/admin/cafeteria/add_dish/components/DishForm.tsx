@@ -1,9 +1,13 @@
 "use client";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { EventInterface } from "@/models/eventModel";
+import { postEventFS } from "@/firestore/events";
+import { PlateInterface } from "@/models/plateModel";
+import { setPlateFS } from "@/firestore/plates";
 import { v4 } from "uuid";
-import { set, ref } from "firebase/database";
+import { set, ref } from "@firebase/database";
 import { realTimeDb } from "../../../../../firestore/firebaseConnection";
 import ModalPage from "../../../../../modals/ModalPage";
 import ModalLoading from "../../../../../modals/ModalLoading";
@@ -11,6 +15,7 @@ import ModalMessage from "../../../../../modals/ModalMessage";
 
 export default function DishForm() {
   const {
+    control,
     handleSubmit,
     formState: { errors },
     register,

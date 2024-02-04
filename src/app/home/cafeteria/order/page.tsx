@@ -8,7 +8,7 @@ import { StoreContext } from "@/store/StoreProvider";
 import { OrderForm } from "@/models/orderModel";
 import ModalPage from "@/modals/ModalPage";
 import ModalConfirmation from "@/modals/ModalConfirmation";
-import { child, push, ref, set, update } from "firebase/database";
+import { ref, set, update } from "firebase/database";
 import { realTimeDb } from "../../../../firestore/firebaseConnection";
 import { v4 } from "uuid";
 
@@ -74,18 +74,16 @@ const OrderPage = () => {
 
       // await setReservedPlateFS(newOrderPlate);
 
-      const newPostKey = push(child(ref(realTimeDb), "plates")).key;
-
       const updates: any = {};
 
-      updates[`/plates/${id}/${newPostKey}`] = { id: id, ...plateGottenData };
+      updates[`/plates/${id}`] = { ...plateGottenData };
 
       update(ref(realTimeDb), updates);
 
       set(ref(realTimeDb, "reserved_plates/" + v4()), {
         client_code: Number(code),
         client_name: username,
-        client_schedule: String(time.start) + ":" + String(time.end),
+        client_schedule: String(time),
         plate_id: id,
         plate_available: plateQuantity - 1 > 0,
         plate_description: plateDescription,

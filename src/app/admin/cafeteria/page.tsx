@@ -7,11 +7,15 @@ import { PlateCard } from "./components/PlateCard";
 import { Button } from "./components/Button";
 import { onValue, ref } from "@firebase/database";
 import { realTimeDb } from "../../../firestore/firebaseConnection";
+import { DatabaseReference } from "firebase/database";
+import ModalPage from "../../../modals/ModalPage";
+import ModalLoading from "../../../modals/ModalLoading";
+import ModalMessage from "../../../modals/ModalMessage";
 
 const AdminCafeteria = () => {
   const router = useRouter();
   const [refresh, setRefresh] = useState<boolean>(false);
-  const updateReference = ref(realTimeDb, "plates/");
+  const updateReference:DatabaseReference = ref(realTimeDb, "plates/");
 
   useEffect(() => {
     if(typeof window !== undefined){
@@ -67,7 +71,7 @@ const AdminCafeteria = () => {
   const [errorFinded, setErrorFinded] = useState<boolean>(false);
   const [plates, setPlates] = useState<PlateInterface[]>([]);
 
-  const getDataFromDB = async () => {
+  const getDataFromDB: () => Promise<void> = async () => {
     try {
       setLoading(true);
       onValue(updateReference, async (snapshot) => {
@@ -133,16 +137,36 @@ const AdminCafeteria = () => {
         setRefresh(!refresh);
       });
     }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 
   useEffect(() => {
     getDataFromDB();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const typeBoolean:boolean = loading || errorFinded;
 
   return (
     <>
-      {loading && <p>Loading</p>}
-      {errorFinded && <p>Error</p>}
+    {
+      (typeBoolean) && (
+        <ModalPage>
+          <>
+          {
+            loading && (
+              <ModalLoading/>
+            )
+          }
+          {
+            errorFinded && (
+              <ModalMessage title={"Error 404!"} message={"Page not finded"}/>
+            )
+          }
+          </>
+        </ModalPage>
+      )
+    }
       :
       {!loading && !errorFinded && (
         <div className="flex absolute inset-0">
@@ -153,25 +177,27 @@ const AdminCafeteria = () => {
               </h1>
             </div>
             <div className="flex h-[15%] items-center justify-between px-7 shadow-lg">
-              <h1 className="text-[#384293] min-[541px]:text-2xl max-[541px]:text-sm font-bold">Lista de Platillos</h1>
+              <h1 className="text-[#384293] min-[541px]:text-2xl max-[541px]:text-sm font-bold">
+                Lista de Platillos
+              </h1>
               <div className="flex min-[541px]:flex-row max-[541px]:flex-col max-[541px]:space-y-2 min-[541px]:space-x-4">
                 <Button
-                  action={() => {}}
-                  color="bg-[#2A9247]"
-                  buttonText="+ Añadir Plato"
+                  action={goToReservedPlates}
+                  color="bg-[#0A8D76]"
+                  buttonText="Ver platos reservados"
                 />
                 <Button
-                  action={() => {}}
-                  color="bg-[#D67952]"
-                  buttonText="Publicar Menú"
+                  action={goToAddDish}
+                  color="bg-[#2A9247]"
+                  buttonText="+ Añadir Plato"
                 />
               </div>
             </div>
             <div className="flex flex-col items-center overflow-y-auto h-[80%]">
               {plates.length!==0 ? <>
                 {
-                  plates.map((plate: PlateInterface) => (
-                    <PlateCard plate={plate} deleteAction={promptToDelete} />
+                  plates.map((plate: PlateInterface, index: number) => (
+                    <PlateCard key={index} plate={plate} deleteAction={promptToDelete} />
                   ))
                 }
               </> : <></>}

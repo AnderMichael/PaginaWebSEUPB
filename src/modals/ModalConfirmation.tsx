@@ -61,8 +61,8 @@ const ModalConfirmation = ({ title, message, actionOne, actionTwo }: Props) => {
           id="ModalConfirmationButtonOneNorica"
           onClick={actionOne}
           type="button"
-          className="inline-flex items-center text-white bg-red-600
-        hover:bg-red-500 active:bg-red-700 font-medium rounded-lg
+          className="inline-flex items-center text-white bg-green-600
+        hover:bg-green-500 active:bg-green-700 font-medium rounded-lg
         text-sm px-5 py-2.5 text-center"
         >
           Confirmar
@@ -71,7 +71,7 @@ const ModalConfirmation = ({ title, message, actionOne, actionTwo }: Props) => {
           onClick={actionTwo}
           type="button"
           className="inline-flex items-center text-white bg-red-600
-        hover:bg-red-500 active:bg-red-700 font-medium rounded-lg
+        hover:bg-red-400 active:bg-red-700 font-medium rounded-lg
         text-sm px-5 py-2.5 text-center ml-3"
         >
           Cancelar

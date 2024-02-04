@@ -56,6 +56,7 @@ export const PlateCard = ({ plate, deleteAction }: Props) => {
             className={`flex ${
               smallerThan ? "w-[50%]" : "h-[50%]"
             } bg-[#E69424] items-center justify-center hover:opacity-80 text-white`}
+            onClick={() => alert('mondongo')}
           >
             <EditIcon />
           </button>
