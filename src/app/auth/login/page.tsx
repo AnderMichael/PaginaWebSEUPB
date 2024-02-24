@@ -3,7 +3,7 @@ import React from "react";
 import LoginForm from "./components/LoginForm";
 import Image from "next/image";
 import seupb  from "@/assets/seupb.jpg"
-export const LoginPage = () => {
+const LoginPage = () => {
   return (
     <div className="bg-[#F2F2F2] flex flex-col absolute h-full w-full justify-center items-center">
       <div className="flex flex-row bg-[#384293] divide-x-2 divide-white p-10 align-center shadow-2xl rounded-3xl shadow-[#302E46]">

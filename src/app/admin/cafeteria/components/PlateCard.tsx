@@ -23,8 +23,6 @@ export const PlateCard = ({ plate, deleteAction }: Props) => {
     plateQuantity,
   } = plate;
 
-  const router = useRouter();
-
   const context: any = useContext(StoreContext);
 
   const biggerEqualThan: boolean = context.widthScreen >= 890;
@@ -58,6 +56,7 @@ export const PlateCard = ({ plate, deleteAction }: Props) => {
             className={`flex ${
               smallerThan ? "w-[50%]" : "h-[50%]"
             } bg-[#E69424] items-center justify-center hover:opacity-80 text-white`}
+            onClick={() => alert('mondongo')}
           >
             <EditIcon />
           </button>

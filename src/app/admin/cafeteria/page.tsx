@@ -2,85 +2,78 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import DeleteModal from "./components/DeleteModal";
-import { getPlatesFS, plates } from "@/firestore/plates";
 import { PlateInterface } from "@/models/plateModel";
 import { PlateCard } from "./components/PlateCard";
 import { Button } from "./components/Button";
-import { onValue, ref } from "firebase/database";
+import { onValue, ref } from "@firebase/database";
 import { realTimeDb } from "../../../firestore/firebaseConnection";
+import { DatabaseReference } from "firebase/database";
+import ModalPage from "../../../modals/ModalPage";
+import ModalLoading from "../../../modals/ModalLoading";
+import ModalMessage from "../../../modals/ModalMessage";
 
 const AdminCafeteria = () => {
   const router = useRouter();
-
   const [refresh, setRefresh] = useState<boolean>(false);
+  const updateReference:DatabaseReference = ref(realTimeDb, "plates/");
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    if (queryParams.has("added")) {
-      queryParams.delete("added");
-      window.history.replaceState(
-        {},
-        document.title,
-        `${window.location.pathname}${queryParams}`
-      );
-      sessionStorage.setItem("notification", "added");
-      router.back();
-      window.location.reload();
-    } else if (queryParams.has("deleted")) {
-      queryParams.delete("deleted");
-      window.history.replaceState(
-        {},
-        document.title,
-        `${window.location.pathname}${queryParams}`
-      );
-      router.back();
-      window.location.reload();
-    } else {
-      if (queryParams.has("error")) {
-        queryParams.delete("error");
+    if(typeof window !== undefined){
+      const queryParams = new URLSearchParams(window.location.search);
+      if (queryParams.has("added")) {
+        queryParams.delete("added");
         window.history.replaceState(
           {},
           document.title,
           `${window.location.pathname}${queryParams}`
         );
-        alert("Hubo un error en el proceso");
-      }
-    }
-
-    window.onload = () => {
-      let notification = sessionStorage.getItem("notification");
-      if (notification != null) {
-        if (notification === "added") {
-          alert("Evento aniadido exitosamente");
-        } else if (notification === "deleted") {
-          alert("Evento eliminado exitosamente");
-        } else if (notification === "edited") {
-          alert("Evento actualizado exitosamente");
+        sessionStorage.setItem("notification", "added");
+        router.back();
+        window.location.reload();
+      } else if (queryParams.has("deleted")) {
+        queryParams.delete("deleted");
+        window.history.replaceState(
+          {},
+          document.title,
+          `${window.location.pathname}${queryParams}`
+        );
+        router.back();
+        window.location.reload();
+      } else {
+        if (queryParams.has("error")) {
+          queryParams.delete("error");
+          window.history.replaceState(
+            {},
+            document.title,
+            `${window.location.pathname}${queryParams}`
+          );
+          alert("Hubo un error en el proceso");
         }
-        sessionStorage.removeItem("notification");
       }
-    };
+
+      window.onload = () => {
+        let notification = sessionStorage.getItem("notification");
+        if (notification != null) {
+          if (notification === "added") {
+            alert("Evento aniadido exitosamente");
+          } else if (notification === "deleted") {
+            alert("Evento eliminado exitosamente");
+          } else if (notification === "edited") {
+            alert("Evento actualizado exitosamente");
+          }
+          sessionStorage.removeItem("notification");
+        }
+      };
+    }
   }, [router]);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errorFinded, setErrorFinded] = useState<boolean>(false);
   const [plates, setPlates] = useState<PlateInterface[]>([]);
-  const updateReference = ref(realTimeDb, "plates/");
 
-  const getDataFromDB = async () => {
+  const getDataFromDB: () => Promise<void> = async () => {
     try {
       setLoading(true);
-      // const data = await getPlatesFS();
-      // if (data !== null) {
-      //   setPlates(data);
-      //   setTimeout(() => {
-      //     setLoading(false);
-      //   }, 1000);
-      // } else {
-      //   setLoading(false);
-      //   setErrorFinded(true);
-      // }
-
       onValue(updateReference, async (snapshot) => {
         const data = await snapshot.val();
         const valuesArray: PlateInterface[] = Object.entries(data).map(
@@ -98,7 +91,8 @@ const AdminCafeteria = () => {
         );
         setPlates(valuesArray);
         setLoading(false);
-      });
+        }
+      );
     } catch (error) {
       console.error(error);
       setLoading(false);
@@ -140,19 +134,40 @@ const AdminCafeteria = () => {
           })
         );
         setPlates(valuesArray);
+        setRefresh(!refresh);
       });
-      setRefresh(!refresh);
     }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 
   useEffect(() => {
     getDataFromDB();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const typeBoolean:boolean = loading || errorFinded;
 
   return (
     <>
-      {loading && <p>Loading</p>}
-      {errorFinded && <p>Error</p>}
+    {
+      (typeBoolean) && (
+        <ModalPage>
+          <>
+          {
+            loading && (
+              <ModalLoading/>
+            )
+          }
+          {
+            errorFinded && (
+              <ModalMessage title={"Error 404!"} message={"Page not finded"}/>
+            )
+          }
+          </>
+        </ModalPage>
+      )
+    }
+      :
       {!loading && !errorFinded && (
         <div className="flex absolute inset-0">
           <div className="flex flex-1 flex-col">
@@ -176,17 +191,16 @@ const AdminCafeteria = () => {
                   color="bg-[#2A9247]"
                   buttonText="+ Añadir Plato"
                 />
-                <Button
-                  action={() => {}}
-                  color="bg-[#D67952]"
-                  buttonText="Publicar Menú"
-                />
               </div>
             </div>
             <div className="flex flex-col items-center overflow-y-auto h-[80%]">
-              {plates.map((plate: PlateInterface) => (
-                <PlateCard plate={plate} deleteAction={promptToDelete} />
-              ))}
+              {plates.length!==0 ? <>
+                {
+                  plates.map((plate: PlateInterface, index: number) => (
+                    <PlateCard key={index} plate={plate} deleteAction={promptToDelete} />
+                  ))
+                }
+              </> : <></>}
             </div>
             <DeleteModal
               isOpen={!!plateToDelete}

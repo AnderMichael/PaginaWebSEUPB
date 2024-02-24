@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { PlateCard } from "./PlateCard";
 import { StoreContext } from "@/store/StoreProvider";
 import { PlatesTypes } from "../types/platesType";
-import { onValue, ref } from "firebase/database";
+import { DatabaseReference, onValue, ref } from "firebase/database";
 import { realTimeDb } from "../../../../../firestore/firebaseConnection";
 import ModalPage from "../../../../../modals/ModalPage";
 import ModalLoading from "../../../../../modals/ModalLoading";
@@ -14,7 +14,6 @@ export const ListPlatesCards = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [platesData, setPlatesData] = useState<PlatesTypes[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
 
   const getDataFromDB = async () => {
@@ -38,7 +37,7 @@ export const ListPlatesCards = () => {
               }),
             })
           );
-          setPlatesData(valuesArray);
+          context.setPlatesData(valuesArray);
           setTimeout(() => {
             setLoading(false);
           }, 100);
@@ -57,7 +56,7 @@ export const ListPlatesCards = () => {
     }
   };
 
-  const updateReference = ref(realTimeDb, "plates/");
+  const updateReference: DatabaseReference = ref(realTimeDb, "plates/");
   useEffect(() => {
     setTimeout(() => {
       onValue(updateReference, async (snapshot) => {
@@ -75,18 +74,21 @@ export const ListPlatesCards = () => {
             }),
           })
         );
-        setPlatesData(valuesArray);
+        context.setPlatesData(valuesArray);
       });
       setRefresh(!refresh);
     }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 
   useEffect(() => {
     context.setOrderMade(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     getDataFromDB();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context.orderMade]);
 
   return (
@@ -105,8 +107,8 @@ export const ListPlatesCards = () => {
         <section
           className={`flex flex-row flex-wrap overflow-y-auto h-[90%] w-[${context.widthScreen}px] justify-center items-start`}
         >
-          {platesData.length !== 0 &&
-            platesData.map((item: PlatesTypes) => (
+          {context.platesData.length !== 0 &&
+            context.platesData.map((item: PlatesTypes) => (
               <PlateCard key={item.id} plate={item} />
             ))}
         </section>

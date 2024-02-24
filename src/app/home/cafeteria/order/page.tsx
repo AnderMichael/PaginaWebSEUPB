@@ -4,14 +4,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { messageOrder } from "./../data";
 import { useRouter } from "next/navigation";
-import { ReservedModelFrontend } from "@/models/reservedPlateModel";
 import { StoreContext } from "@/store/StoreProvider";
 import { OrderForm } from "@/models/orderModel";
-import { setReservedPlateFS } from "@/firestore/order";
 import ModalPage from "@/modals/ModalPage";
 import ModalConfirmation from "@/modals/ModalConfirmation";
-import { PlateInterface } from "../../../../models/plateModel";
-import { child, push, ref, set, update } from "firebase/database";
+import { ref, set, update } from "firebase/database";
 import { realTimeDb } from "../../../../firestore/firebaseConnection";
 import { v4 } from "uuid";
 
@@ -67,7 +64,7 @@ const OrderPage = () => {
         plateQuantity: plateQuantity - 1,
       };
 
-      const newOrderPlate: ReservedModelFrontend = {
+      const newOrderPlate = {
         clientCode: Number(code),
         clientName: username,
         clientSchedule: String(time.start) + ":" + String(time.end),
@@ -75,7 +72,7 @@ const OrderPage = () => {
         ...plateGottenData,
       };
 
-      await setReservedPlateFS(newOrderPlate);
+      // await setReservedPlateFS(newOrderPlate);
 
       const updates: any = {};
 
@@ -83,10 +80,10 @@ const OrderPage = () => {
 
       update(ref(realTimeDb), updates);
 
-      set(ref(realTimeDb, "reserver_plates/" + v4()), {
+      set(ref(realTimeDb, "reserved_plates/" + v4()), {
         client_code: Number(code),
         client_name: username,
-        client_schedule: String(time.start) + ":" + String(time.end),
+        client_schedule: String(time),
         plate_id: id,
         plate_available: plateQuantity - 1 > 0,
         plate_description: plateDescription,

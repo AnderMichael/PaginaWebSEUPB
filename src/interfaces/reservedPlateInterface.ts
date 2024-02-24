@@ -1,10 +1,11 @@
 import { ReservedModelBackend, ReservedModelFrontend } from "@/models/reservedPlateModel";
 
 export const reservedPlateFrontendToBackend = (reservedPLate:ReservedModelFrontend):ReservedModelBackend => {
-  const { clientCode, clientName, clientSchedule, plateId, plateAvailable, plateDescription,
+  const { id, clientCode, clientName, clientSchedule, plateId, plateAvailable, plateDescription,
     plateImage, plateName, platePrice, plateQuantity } = reservedPLate;
     
   return {
+    id,
     client_code:clientCode,
     client_name:clientName,
     client_schedule:clientSchedule,

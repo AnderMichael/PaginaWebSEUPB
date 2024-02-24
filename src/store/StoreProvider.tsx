@@ -30,6 +30,8 @@ const StoreProvider = ({ children }: Props) => {
     plateQuantity: 0,
   });
 
+  const [platesData, setPlatesData] = useState<PlatesTypes[]>([]);
+
   const [generalLoading, setGeneralLoading] = useState<boolean>(false);
   const [generalError, setGeneralError] = useState<boolean>(false);
 
@@ -91,6 +93,8 @@ const StoreProvider = ({ children }: Props) => {
         setHeightScreen,
         dataPlateToReserve,
         setDataPlateToReserve,
+        platesData,
+        setPlatesData,
         menuPageHeight,
         setMenuPageHeight,
         generalLoading,

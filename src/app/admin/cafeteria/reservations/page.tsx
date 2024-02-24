@@ -4,28 +4,32 @@ import { getReserverPlateFS } from "@/firestore/order";
 import { ReservedModelBackend } from "@/models/reservedPlateModel";
 import { onValue, ref } from "firebase/database";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { realTimeDb } from "../../../../firestore/firebaseConnection";
-import { onValue, ref } from "firebase/database";
+import { DatabaseReference, onValue, ref, remove, update } from "firebase/database";
 import ModalPage from "../../../../modals/ModalPage";
 import ModalLoading from "../../../../modals/ModalLoading";
+import { StoreContext } from "../../../../store/StoreProvider";
+import { PlatesTypes } from "../../../home/cafeteria/menu/types/platesType";
 
 const ReservationPage = () => {
+  const context: any = useContext(StoreContext);
+  const platesData:PlatesTypes[] = context.platesData;
   const router = useRouter();
   const [orders, setOrders] = useState<ReservedModelBackend[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
 
-  const updateReference = ref(realTimeDb, "reserved_plates/");
+  const updateReference: DatabaseReference = ref(realTimeDb, "reserved_plates/");
+  const platesUpdateReference: DatabaseReference = ref(realTimeDb, "plates/");
 
-  const getDataFromDB = async () => {
+  const getDataFromDB: () => Promise<void> = async () => {
     try {
       setLoading(true);
 
       onValue(
-        updateReference,
-        async (snapshot) => {
-          const data = await snapshot.val();
+        updateReference, (snapshot) => {
+          const data = snapshot.val();
           const valuesArray: ReservedModelBackend[] = Object.entries(data).map(
             ([id, props]) => ({
               id,
@@ -81,13 +85,55 @@ const ReservationPage = () => {
         );
         setOrders(valuesArray);
       });
+
+      onValue(platesUpdateReference, async (snapshot) => {
+        const data = await snapshot.val();
+        const valuesArray: PlatesTypes[] = Object.entries(data).map(
+          ([id, props]) => ({
+            id,
+            ...(props as {
+              plateName: string;
+              platePrice: number;
+              plateAvailable: boolean;
+              plateDescription: string;
+              plateImage: string;
+              plateQuantity: number;
+            }),
+          })
+        );
+        context.setPlatesData(valuesArray);
+      });
       setRefresh(!refresh);
     }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 
   useEffect(() => {
     getDataFromDB();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const removeMyOrder = async (itemId:string) => {
+    await remove(ref(realTimeDb, 'reserved_plates/' + itemId));
+  };
+
+  const deleteOrder = async (itemId:string, plateId: string) => {
+    const plateFounded:any = {...platesData.find((item: PlatesTypes) => item.id === plateId)} || {
+      id: "",
+      plateName: "",
+      platePrice: 0,
+      plateAvailable: false,
+      plateDescription: "",
+      plateImage: "",
+      plateQuantity: 0
+    };
+    const updates: any = {};
+    delete plateFounded.id;
+    plateFounded.plateQuantity += 1;
+    updates[`/plates/${plateId}`] = plateFounded;
+    await update(ref(realTimeDb), updates);
+    removeMyOrder(itemId);
+  };
 
   return (
     <>
@@ -151,7 +197,7 @@ const ReservationPage = () => {
                       {order.client_schedule}
                     </td>
                     <td className="text-black text-center px-4 py-2">
-                      <button onClick={() => console.log("handleEdit(client)")}>
+                      <button onClick={() => alert("MONDONGO")}>
                         <div className="h-5 w-5 text-[#1A4E1C] hover:text-[#173518]">
                           Entregado
                         </div>
@@ -159,12 +205,12 @@ const ReservationPage = () => {
                     </td>
                     <td className="text-black text-center px-4 py-2">
                       <button
-                        onClick={() => console.log("promptToDelete(client)")}
+                        onClick={() => deleteOrder(order.id, order.plate_id)}
                       >
-                        <div className="h-5 w-5 text-red-500 hover:text-red-700">
+                        <span className="h-5 w-5 text-red-500 hover:text-red-700">
                           {" "}
                           Eliminar
-                        </div>
+                        </span>
                       </button>
                     </td>
                   </tr>

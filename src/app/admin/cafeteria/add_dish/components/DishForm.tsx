@@ -6,6 +6,12 @@ import { EventInterface } from "@/models/eventModel";
 import { postEventFS } from "@/firestore/events";
 import { PlateInterface } from "@/models/plateModel";
 import { setPlateFS } from "@/firestore/plates";
+import { v4 } from "uuid";
+import { set, ref } from "@firebase/database";
+import { realTimeDb } from "../../../../../firestore/firebaseConnection";
+import ModalPage from "../../../../../modals/ModalPage";
+import ModalLoading from "../../../../../modals/ModalLoading";
+import ModalMessage from "../../../../../modals/ModalMessage";
 
 export default function DishForm() {
   const {
@@ -24,8 +30,9 @@ export default function DishForm() {
   const onSubmit = async (data: any) => {
     if (!cancel) {
       try {
-        const response: PlateInterface = {
-          id: "1",
+        setLoading(true);
+        const ID:string = v4();
+        const response = {
           plateName: data.name,
           platePrice: data.price,
           plateQuantity: data.quantity,
@@ -34,17 +41,13 @@ export default function DishForm() {
           plateImage:
             "https://images.pexels.com/photos/18111272/pexels-photo-18111272/free-photo-of-slogan-on-wall.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
         };
-        setLoading(true);
-        const posting = await setPlateFS(response);
-        console.log(posting)
+        
+        await set(ref(realTimeDb, "plates/" + ID), {
+          ...response
+        });
+        
+
         router.back();
-       /* if (!posting) {
-          router.replace("/cafeteria_admin?added");
-          setLoading(false);
-        } else {
-          setLoading(false);
-          setErrorFinded(true);
-        }*/
       } catch (err) {
         setLoading(false);
         setErrorFinded(true);
@@ -56,8 +59,17 @@ export default function DishForm() {
 
   return (
     <>
-      {loading && <p>Loading...</p>}
-      {errorFinded && <p>Error!</p>}
+      {
+        loading || errorFinded && (
+          <ModalPage>
+            <>
+            {loading && <ModalLoading/>}
+            {errorFinded && <ModalMessage title={"Error 500"} message={`There was an error with the app,
+            try again or come back later`}/>}
+            </>
+          </ModalPage>
+        )
+      }
       {!loading && !errorFinded && (
         <form
           onSubmit={handleSubmit(onSubmit)}
