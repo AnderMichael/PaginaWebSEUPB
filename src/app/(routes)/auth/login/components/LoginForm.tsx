@@ -43,6 +43,7 @@ const LoginForm = () => {
   useEffect(() => {
     setAuthAdmin(false);
     setAuthNormal(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
