@@ -1,6 +1,7 @@
 import { StoreContext } from "@/store/StoreProvider";
 import Image from "next/image";
 import React, { useContext } from "react";
+import { defaultImage } from "../../../../../data/defaultPlate";
 
 interface Props {
   imageUrl: string;
@@ -9,7 +10,7 @@ interface Props {
 export const ImagePlate = ({ imageUrl }: Props) => {
   // el width de la imagen debe venir en formato de 'px';
   const context: any = useContext(StoreContext);
-  const SRC: string = imageUrl;
+  const SRC: string = imageUrl || defaultImage;
 
   return (
     <figure

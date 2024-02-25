@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { PlateInterface } from "@/models/plateModel";
 import { ref, remove } from "firebase/database";
-import { realTimeDb } from "../../../../firestore/firebaseConnection";
+import { realTimeDb } from "../../../../../firestore/firebaseConnection";
 
 interface DeleteModalProps {
   isOpen: boolean;

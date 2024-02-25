@@ -6,11 +6,11 @@ import { PlateInterface } from "@/models/plateModel";
 import { PlateCard } from "./components/PlateCard";
 import { Button } from "./components/Button";
 import { onValue, ref } from "@firebase/database";
-import { realTimeDb } from "../../../firestore/firebaseConnection";
 import { DatabaseReference } from "firebase/database";
-import ModalPage from "../../../modals/ModalPage";
-import ModalLoading from "../../../modals/ModalLoading";
-import ModalMessage from "../../../modals/ModalMessage";
+import { realTimeDb } from "../../../../firestore/firebaseConnection";
+import ModalLoading from "../../../../modals/ModalLoading";
+import ModalMessage from "../../../../modals/ModalMessage";
+import ModalPage from "../../../../modals/ModalPage";
 
 const AdminCafeteria = () => {
   const router = useRouter();

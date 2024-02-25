@@ -2,11 +2,13 @@
 import { useRouter } from "next/navigation";
 import EventCard from "./components/EventCard";
 import useAxios from "axios-hooks";
-import EventUPB from "../../types/EventUPB";
 import { useEffect, useState } from "react";
 import DeleteModal from "./components/DeleteModal";
 import { EventInterface } from "@/models/eventModel";
 import { getEventsFS } from "@/firestore/events";
+import ModalLoading from "../../../../modals/ModalLoading";
+import ModalMessage from "../../../../modals/ModalMessage";
+import ModalPage from "../../../../modals/ModalPage";
 
 const AdminEvents = () => {
   const router = useRouter();
@@ -99,8 +101,24 @@ const AdminEvents = () => {
 
   return (
     <>
-      {loading && <p>Loading</p>}
-      {errorFinded && <p>Error</p>}
+      {
+      (loading || errorFinded) && (
+        <ModalPage>
+          <>
+          {
+            loading && (
+              <ModalLoading/>
+            )
+          }
+          {
+            errorFinded && (
+              <ModalMessage title={"Error 404!"} message={"Page not finded"}/>
+            )
+          }
+          </>
+        </ModalPage>
+      )
+    }
       {!loading && !errorFinded && (
         <div className="flex absolute inset-0">
           <div className="flex flex-1 flex-col">

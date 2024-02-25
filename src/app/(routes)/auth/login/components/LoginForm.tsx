@@ -1,7 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { StoreContext } from "../../../../../store/StoreProvider";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -11,7 +12,8 @@ const LoginForm = () => {
     handleSubmit,
   } = useForm();
 
-  // const { isLogged, login } = useAuth();
+  const context:any = useContext(StoreContext);
+  const { setAuthNormal, setAuthAdmin } = context;
 
   const [incorrect, setIncorrect] = useState(false);
 
@@ -20,25 +22,33 @@ const LoginForm = () => {
       data.email === "cafe@upb.com" &&
       data.password === "cafe1234"
     ) {
+      setAuthAdmin(true);
       router.push("/admin/cafeteria");
-     // login();
     } else if(
       data.email === "evento@upb.com" &&
       data.password === "evento123"
     ){
+      setAuthAdmin(true);
       router.push("/admin/events");
     }else{
+      setAuthAdmin(false);
       setIncorrect(true);
     }
   };
   const click = () => {
+    setAuthNormal(true);
     router.push("/home/cafeteria");
   }
 
+  useEffect(() => {
+    setAuthAdmin(false);
+    setAuthNormal(false);
+  }, []);
+
   return (
-    <div className="flex flex-col bg-white p-10 rounded-lg space-y-4 md:space-y-6 h-full w-full">
+    <div className="flex flex-col bg-white min-[319px]:p-4 md:p-10 rounded-lg space-y-4 md:space-y-6 h-full w-full">
       <form
-        className="flex flex-col "
+        className="flex flex-col"
         onSubmit={handleSubmit(checkUser)}
       >
         <div className="flex  flex-col">

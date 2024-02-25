@@ -8,10 +8,11 @@ import { PlateInterface } from "@/models/plateModel";
 import { setPlateFS } from "@/firestore/plates";
 import { v4 } from "uuid";
 import { set, ref } from "@firebase/database";
-import { realTimeDb } from "../../../../../firestore/firebaseConnection";
-import ModalPage from "../../../../../modals/ModalPage";
-import ModalLoading from "../../../../../modals/ModalLoading";
-import ModalMessage from "../../../../../modals/ModalMessage";
+import { realTimeDb } from "../../../../../../firestore/firebaseConnection";
+import ModalLoading from "../../../../../../modals/ModalLoading";
+import ModalMessage from "../../../../../../modals/ModalMessage";
+import ModalPage from "../../../../../../modals/ModalPage";
+import { defaultImage } from "../../../../../../data/defaultPlate";
 
 export default function DishForm() {
   const {
@@ -38,8 +39,7 @@ export default function DishForm() {
           plateQuantity: data.quantity,
           plateAvailable: true,
           plateDescription: data.description,
-          plateImage:
-            "https://images.pexels.com/photos/18111272/pexels-photo-18111272/free-photo-of-slogan-on-wall.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+          plateImage: defaultImage,
         };
         
         await set(ref(realTimeDb, "plates/" + ID), {

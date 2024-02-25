@@ -3,10 +3,10 @@ import { StoreContext } from "@/store/StoreProvider";
 import React, { useContext } from "react";
 import { ImagePlate } from "./ImagePlate";
 import { useRouter } from "next/navigation";
-import { PlatesTypes } from "@/app/home/cafeteria/menu/types/platesType";
 import TrashIcon from "@/assets/TrashIcon";
 import EditIcon from "@/assets/EditIcon";
 import { PlateInterface } from "@/models/plateModel";
+import { PlatesTypes } from "../../../home/cafeteria/menu/types/platesType";
 
 interface Props {
   plate: PlatesTypes;

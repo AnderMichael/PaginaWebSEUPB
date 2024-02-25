@@ -2,12 +2,12 @@
 import { ReservedModelBackend } from "@/models/reservedPlateModel";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
-import { realTimeDb } from "../../../../firestore/firebaseConnection";
 import { DatabaseReference, onValue, ref, remove, update } from "firebase/database";
-import ModalPage from "../../../../modals/ModalPage";
-import ModalLoading from "../../../../modals/ModalLoading";
-import { StoreContext } from "../../../../store/StoreProvider";
 import { PlatesTypes } from "../../../home/cafeteria/menu/types/platesType";
+import { realTimeDb } from "../../../../../firestore/firebaseConnection";
+import ModalLoading from "../../../../../modals/ModalLoading";
+import ModalPage from "../../../../../modals/ModalPage";
+import { StoreContext } from "../../../../../store/StoreProvider";
 
 const ReservationPage = () => {
   const context: any = useContext(StoreContext);

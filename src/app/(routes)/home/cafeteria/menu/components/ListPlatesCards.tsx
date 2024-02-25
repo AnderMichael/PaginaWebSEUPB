@@ -4,10 +4,10 @@ import { PlateCard } from "./PlateCard";
 import { StoreContext } from "@/store/StoreProvider";
 import { PlatesTypes } from "../types/platesType";
 import { DatabaseReference, onValue, ref } from "firebase/database";
-import { realTimeDb } from "../../../../../firestore/firebaseConnection";
-import ModalPage from "../../../../../modals/ModalPage";
-import ModalLoading from "../../../../../modals/ModalLoading";
-import ModalMessage from "../../../../../modals/ModalMessage";
+import { realTimeDb } from "../../../../../../firestore/firebaseConnection";
+import ModalLoading from "../../../../../../modals/ModalLoading";
+import ModalMessage from "../../../../../../modals/ModalMessage";
+import ModalPage from "../../../../../../modals/ModalPage";
 
 export const ListPlatesCards = () => {
   const context: any = useContext(StoreContext);

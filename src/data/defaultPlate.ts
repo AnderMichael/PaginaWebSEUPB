@@ -1,0 +1,1 @@
+export const defaultImage:string = 'https://i.pinimg.com/originals/ce/e1/d3/cee1d35e344b0ffddd49f5f812cca308.jpg';
