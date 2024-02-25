@@ -126,10 +126,10 @@ const OrderPage = () => {
           />
         </ModalPage>
       )}
-      <div className="lg:py-20 md:py-10 lg:px-40 md:px-40 sm:p-10 left-0 right-0 top-0 bottom-0">
+      <div className="lg:py-20 md:py-10 lg:px-40 md:px-40 sm:p-10 left-0 right-0 top-0 bottom-0 w-full">
         <form
           onSubmit={handleSubmit((data) => onCheckSubmit(data))}
-          className="flex flex-col space-y-4 md:space-y-6 text-lg  mx-10 sm:ml-10"
+          className="flex flex-col space-y-4 md:space-y-6 text-lg w-full px-6"
         >
           <div>
             <label className="block mb-2 font-medium text-gray-900">
@@ -172,13 +172,6 @@ const OrderPage = () => {
             />
           </div>
           <div className="flex items-center justify-between">
-            {error && (
-              <label className="block mb-2 text-sm font-medium text-red-500 ">
-                Datos inválidos
-              </label>
-            )}
-          </div>
-          <div className="flex items-center justify-between">
             <label className="block mb-2  font-medium text-gray-900 ">
               {messageOrder}
             </label>
@@ -197,18 +190,25 @@ const OrderPage = () => {
               {...register("acceptTerms", { required: true })}
             />
           </div>
-          <div className="flex flex-row">
+          <div className="flex items-center justify-between">
+            {error && (
+              <label className="block mb-2 text-sm font-medium text-red-500 ">
+                Datos inválidos
+              </label>
+            )}
+          </div>
+          <div className="flex flex-row w-full">
             <button
               type="submit"
-              className="w-1/4 text-white bg-[#0A8D76] hover:bg-emerald-600 m-5  font-medium rounded-lg  px-5 py-2.5 text-center mt-3"
+              className="md:w-1/4 text-white bg-[#0A8D76] hover:bg-emerald-600 m-5 font-light md:font-medium rounded-lg  px-5 py-2.5 text-center mt-3"
             >
               ENVIAR
             </button>
 
             <button
               type="button"
-              className="w-1/4 text-white bg-red-500 hover:bg-red-400 active:bg-red-600 m-5
-              font-medium rounded-lg  px-5 py-2.5 text-center mt-3"
+              className="md:w-1/4 text-white bg-red-500 hover:bg-red-400 active:bg-red-600 m-5
+              md:font-medium font-light rounded-lg  md:px-5 px-3 py-2.5 text-center mt-3"
               onClick={() => {
                 router.back();
               }}
