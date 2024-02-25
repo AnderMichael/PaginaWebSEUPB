@@ -24,7 +24,6 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
       setLoading(false);
       onClose();
       sessionStorage.setItem("notification", "deleted");
-      window.location.reload();
     } catch (error) {
       setLoading(false);
       onClose();

@@ -66,17 +66,18 @@ const StoreProvider = ({ children }: Props) => {
       setWidthScreen(window.innerWidth);
       // eslint-disable-next-line react-hooks/exhaustive-deps
       setHeightScreen(window.innerHeight);
+      setTextHeader("Cafeteria");
 
-      if (!pathname.includes("cafeteria")) {
-        setTextHeader(
-          localStorage.getItem("headerTitle")
-            ? JSON.parse(localStorage.getItem("headerTitle") || "{}")
-                .headerTitle
-            : ""
-        );
-      } else {
-        setTextHeader("cafeteria");
-      }
+      // if (!pathname.includes("cafeteria")) {
+      //   setTextHeader(
+      //     localStorage.getItem("headerTitle")
+      //       ? JSON.parse(localStorage.getItem("headerTitle") || "{}")
+      //           .headerTitle
+      //       : ""
+      //   );
+      // } else {
+      //   setTextHeader("cafeteria");
+      // }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
