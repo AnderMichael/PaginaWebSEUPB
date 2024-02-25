@@ -20,10 +20,10 @@ export const OptionSideBar = ({ textOption, navigationOption }: Props) => {
         );
         router.push(`/home/${navigationOption}`);
       }}
-      className="flex items-center p-2 bg-[#6F6FC8]
-      hover:bg-[#9A9AE6] active:bg-[#9A9AE6] text-white w-full"
+      className="flex items-center p-2 bg-[#fdd095]
+      hover:bg-[#e6b89a] text-white w-full"
     >
-      <span className="ml-3 text-xl font-semibold">{textOption}</span>
+      <span className="ml-3 text-2xl font-bold">{textOption}</span>
     </button>
   );
 };

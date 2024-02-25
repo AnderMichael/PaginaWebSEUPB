@@ -36,19 +36,19 @@ const LoginForm = () => {
   }
 
   return (
-    <div className="flex bg-white p-10 rounded-lg">
+    <div className="flex flex-col bg-white p-10 rounded-lg space-y-4 md:space-y-6 h-full w-full">
       <form
-        className="flex flex-col space-y-4 md:space-y-6 h-[50%] w-[270px]"
+        className="flex flex-col "
         onSubmit={handleSubmit(checkUser)}
       >
-        <div className="flex flex-1 flex-col">
+        <div className="flex  flex-col">
           <div className="mb-2 block">
             <label className="text-[#302E46] font-semibold text-xl font-jost">
               Correo Electrónico
             </label>
           </div>
           <input
-            className="flex-1 bg-white text-gray-800 rounded-lg font-josefin font-light"
+            className=" bg-white text-gray-800 rounded-lg font-josefin font-light"
             placeholder="usuario@email.com"
             type="text"
             {...register("email", {
@@ -67,14 +67,14 @@ const LoginForm = () => {
             </p>
           )}
         </div>
-        <div className="flex flex-1 flex-col">
+        <div className="flex  flex-col">
           <div className="mb-2 block">
             <label className="text-[#302E46] font-semibold font-jost text-xl">
               Contraseña
             </label>
           </div>
           <input
-            className="flex-1 bg-white text-gray-800 rounded-lg font-josefin"
+            className=" bg-white text-gray-800 rounded-lg font-josefin"
             placeholder="°°°°°°°°"
             type="password"
             {...register("password", { required: true, minLength: 8 })}
@@ -95,10 +95,9 @@ const LoginForm = () => {
             * El correo y la contraseña son incorrectos, introdúcelos de nuevo
           </p>
         )}
-        <button type="submit" className="flex-1 bg-[#0A8D76] hover:bg-green-700 p-2 rounded-xl text-white font-medium">Ingresar</button> 
-        <button onClick={click} className="flex-1 bg-[#0A8D76] hover:bg-green-500 p-2 rounded-xl text-white font-medium">Ingresar como usuario</button> 
-
+        <button type="submit" className=" bg-[#63CCC5] hover:bg-green-700 p-2 rounded-xl text-white font-medium mt-5">Ingresar</button> 
       </form>
+      <button onClick={click} className=" bg-[#63CCC5] hover:bg-green-500 p-2 rounded-xl text-white font-medium">Ingresar como usuario</button> 
 
     </div>
   );
