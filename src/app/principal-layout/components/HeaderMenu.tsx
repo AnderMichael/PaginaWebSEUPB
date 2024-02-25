@@ -8,15 +8,14 @@ export const HeaderMenu = () => {
   const context: any = useContext(StoreContext);
 
   return (
-    <div className="flex flex-row justify-start items-center z-10 bg-[#4752B7] h-20 w-full">
-      <div className="flex justify-start items-center w-full h-20">
+    <div className="flex flex-row justify-start items-center z-10 bg-orange-1 w-full">
+      <div className="flex justify-start items-center w-full h-24">
         {!context.sideBarOpened && <ShowOptionsPrincipalLayout />}
         <div
-          className={`flex flex-row justify-start items-center w-[200px] h-20 mr-3 ease-linear
+          className={`flex flex-row justify-start items-center w-[200px] h-fit py-10 mr-3 ease-linear bg-orange-400
           duration-300 fixed ${
             context.sideBarOpened ? "translate-x-0" : "-translate-x-60"
           }`}
-          style={{ backgroundColor: "#2C2C84" }}
         >
           <ShowOptionsPrincipalLayout />
           <TitleMenu id={"drawer-navigation-label"} titleText={"SEUPB"} />

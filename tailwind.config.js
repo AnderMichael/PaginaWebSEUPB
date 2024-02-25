@@ -18,6 +18,10 @@ module.exports = {
         'google-font-one': "url('https://fonts.googleapis.com/css2?family=Bruno+Ace&family=Jost&display=swap')"
       }
     },
+    colors: {
+      'orange-1': '#FD9C55',
+      'sky-green-1': '#63CCC5'
+    }
   },
   plugins: [
     require("flowbite/plugin")
