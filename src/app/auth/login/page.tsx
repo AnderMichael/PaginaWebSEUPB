@@ -5,8 +5,8 @@ import Image from "next/image";
 import seupb  from "@/assets/seupb.jpg"
 const LoginPage = () => {
   return (
-    <div className="bg-[#F2F2F2] flex flex-col absolute h-full w-full justify-center items-center">
-      <div className="flex flex-row bg-[#384293] divide-x-2 divide-white p-10 align-center shadow-2xl rounded-3xl shadow-[#302E46]">
+    <div className="bg-[#fff8ec] flex flex-col absolute h-full w-full justify-center items-center">
+      <div className="flex flex-row bg-[#f28b42] divide-x-2 divide-white p-10 align-center shadow-2xl rounded-3xl shadow-[#FD9C55]">
         <div className="flex flex-1 flex-col justify-center items-center px-16 py-5 mx-10">
         <h1 className="text-[40px] text-white my-5 text-left font-bold font-josefin mt-10">
             SEUPBweb

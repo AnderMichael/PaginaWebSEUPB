@@ -9,7 +9,7 @@ const AddDish = () => {
   return (
     <div className="flex absolute inset-0">
       <div className="flex flex-1 flex-col">
-        <div className="flex h-[10%] bg-[#2B2BB2] items-center max-[541px]:justify-center min-[541px]:justify-between px-7">
+        <div className="flex h-[10%] bg-orange-1 items-center max-[541px]:justify-center min-[541px]:justify-between px-7">
           <h1 className="text-white min-[541px]:text-4xl max-[541px]:text-3xl font-bold">
             Agregar Platillo
           </h1>

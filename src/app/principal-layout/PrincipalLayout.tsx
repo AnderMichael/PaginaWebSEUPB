@@ -10,7 +10,7 @@ export const PrincipalLayout = ({
 }) => {
   return (
     <>
-      <div className="flex flex-col bg-slate-50 h-max w-full font-google-font-one">
+      <div className="flex flex-col bg-slate-50 h-max w-full font-cabin">
         <HeaderMenu />
         <div className={`flex flex-row justify-start`}>
           <SideBarMenu />

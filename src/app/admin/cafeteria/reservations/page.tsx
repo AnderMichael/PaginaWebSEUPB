@@ -146,14 +146,14 @@ const ReservationPage = () => {
           </h1>
           <button
             onClick={() => router.back()}
-            className="font-bold font-jost text-lg bg-[#3d3b57] hover:bg-[#302E46]  text-white px-6 py-4 rounded-2xl shadow-black shadow-md"
+            className="font-bold font-jost text-lg bg-[#454464] hover:bg-[#302E46]  text-white px-6 py-4 rounded-2xl shadow-black shadow-md"
           >
             ATRAS
           </button>
         </div>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="bg-[#384293] text-white font-bold text-2xl">
+            <thead className="bg-orange-1 text-white font-bold text-2xl">
               <tr>
                 <th scope="col" className="px-6 py-3 text-center">
                   Código
@@ -178,7 +178,7 @@ const ReservationPage = () => {
                   <tr
                     key={index}
                     className={
-                      index % 2 === 0 ? " bg-[#C3D9F2]" : "bg-[#EEF6FF]"
+                      index % 2 === 0 ? " bg-orange-100" : "bg-zinc-50"
                     }
                   >
                     <td className="text-black text-center px-4 py-2">

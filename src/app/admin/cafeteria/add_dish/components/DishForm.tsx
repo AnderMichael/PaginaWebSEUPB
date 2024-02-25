@@ -142,14 +142,14 @@ export default function DishForm() {
 
           <button
             type="submit"
-            className="bg-[#3636C5] text-white py-2 px-4 rounded hover:opacity-50 max-[541px]:mb-4 font-bold"
+            className="bg-orange-1 text-white py-2 px-4 rounded hover:opacity-80 max-[541px]:mb-4 font-bold"
           >
             Crear
           </button>
 
           <input
             type="button"
-            className="bg-[#3636C5] text-white py-2 px-4 rounded hover:opacity-50 min-[541px]:hidden font-bold"
+            className="bg-sky-green-1 text-white py-2 px-4 rounded hover:opacity-80 min-[541px]:hidden font-bold"
             onClick={() => router.back()}
             value="Atrás"
           />
