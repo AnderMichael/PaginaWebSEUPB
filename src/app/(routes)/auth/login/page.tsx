@@ -10,7 +10,7 @@ const LoginPage = () => {
   <div className="flex flex-col md:flex-row bg-[#f28b42] divide-y md:divide-y-0 divide-x-0 md:divide-x-2 divide-white p-5 md:p-10 align-center shadow-2xl rounded-3xl shadow-[#FD9C55] w-full max-w-4xl">
     <div className="flex flex-1 flex-col justify-center items-center px-12 max-[426px]:px-4 py-5">
       <h1 className="text-3xl md:text-[40px] text-white my-5 text-left font-bold font-josefin">
-        SEUPBweb
+        CABRITA HUB
       </h1>
       <Image src={seupb} alt={"uwu"} className="rounded-3xl w-40 md:w-40 shadow-2xl shadow-black"/>
     </div>
