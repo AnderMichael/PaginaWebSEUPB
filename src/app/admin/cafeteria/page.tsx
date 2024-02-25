@@ -171,13 +171,13 @@ const AdminCafeteria = () => {
       {!loading && !errorFinded && (
         <div className="flex absolute inset-0">
           <div className="flex flex-1 flex-col">
-            <div className="flex h-[10%] bg-[#2B2BB2] items-center max-[541px]:justify-center px-7">
+            <div className="flex h-[10%] bg-orange-1 items-center max-[541px]:justify-center px-7">
               <h1 className="text-white min-[541px]:text-4xl max-[541px]:text-3xl font-bold">
                 Actualizar Menú
               </h1>
             </div>
             <div className="flex h-[15%] items-center justify-between px-7 shadow-lg">
-              <h1 className="text-[#384293] min-[541px]:text-2xl max-[541px]:text-sm font-bold">
+              <h1 className="text-orange-700 min-[541px]:text-2xl max-[541px]:text-sm font-bold">
                 Lista de Platillos
               </h1>
               <div className="flex min-[541px]:flex-row max-[541px]:flex-col max-[541px]:space-y-2 min-[541px]:space-x-4">

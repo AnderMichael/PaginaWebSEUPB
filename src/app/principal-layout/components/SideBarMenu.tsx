@@ -8,7 +8,7 @@ export const SideBarMenu = () => {
   return (
     <div
       className={`w-[200px] bg-secondary-one fixed h-full z-40 ease-linear
-  duration-300 bg-[#6F6FC8] ${
+  duration-300 bg-[#fdd095] ${
     context.sideBarOpened ? "translate-x-0" : "-translate-x-60"
   }
   `}

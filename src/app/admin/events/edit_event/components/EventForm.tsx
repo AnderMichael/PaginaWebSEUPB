@@ -188,7 +188,7 @@ const EventForm = ({ eventData }: EventFormProps) => {
 
       <button
         type="submit"
-        className="bg-[#3636C5] text-white py-2 px-4 rounded hover:opacity-50 max-[541px]:mb-4 font-bold"
+        className="bg-teal-400 text-white py-2 px-4 rounded hover:opacity-80 max-[541px]:mb-4 font-bold"
       >
         Actualizar
       </button>
