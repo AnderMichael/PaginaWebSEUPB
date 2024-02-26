@@ -8,6 +8,9 @@ import { realTimeDb } from "../../../../../firestore/firebaseConnection";
 import ModalLoading from "../../../../../modals/ModalLoading";
 import ModalPage from "../../../../../modals/ModalPage";
 import { StoreContext } from "../../../../../store/StoreProvider";
+import ModalConfirmation from "../../../../../modals/ModalConfirmation";
+import ModalMessage from "../../../../../modals/ModalMessage";
+import ModalMessageWithButton from "../../../../../modals/ModalMessageWithButton";
 
 const ReservationPage = () => {
   const context: any = useContext(StoreContext);
@@ -132,11 +135,26 @@ const ReservationPage = () => {
     removeMyOrder(itemId);
   };
 
+  const [entregado, setEntregado] = useState<boolean>(false);
+
+  const [orderPlateId, setOrderPlateId] = useState<string>('');
+
+  const [endEntregado, setEndEntregado]= useState<boolean>(false);
+
   return (
     <>
-      {loading && (
+      {(loading || entregado || endEntregado) && (
         <ModalPage>
-          <ModalLoading />
+          <>
+            {loading && <ModalLoading />}
+            {entregado && <ModalConfirmation
+            actionOne={() => {setEntregado(false);setLoading(true);
+            removeMyOrder(orderPlateId);setLoading(false);setEndEntregado(true);}}
+            actionTwo={() => setEntregado(false)} title={"Entregar plato"}
+            message={"¿Desea entrega el plato?"}/>}
+            {endEntregado && <ModalMessageWithButton action={() => setEndEntregado(false)}
+            title={"Plato Entregado"} message={"El plato a sido entregado correctamente"}/>}
+            </>
         </ModalPage>
       )}
       <div className="container mx-auto p-4 w-[70%]">
@@ -194,9 +212,12 @@ const ReservationPage = () => {
                       {order.client_schedule}
                     </td>
                     <td className="text-black text-center px-4 py-2">
-                      <button onClick={() => alert("MONDONGO")}>
-                        <div className="h-5 w-5 text-[#1A4E1C] hover:text-[#173518]">
-                          Entregado
+                      <button onClick={() => {
+                        setOrderPlateId(order.id);
+                        setEntregado(true);
+                      }}>
+                        <div className={`h-5 w-5 ${entregado ? 'text-[#1A4E1C]' : 'text-blue-500'} hover:text-[#173518]`}>
+                          {entregado ? 'Entregado' : 'Entregar'}
                         </div>
                       </button>
                     </td>
