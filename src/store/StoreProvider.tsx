@@ -1,8 +1,7 @@
 "use client";
-import { PlatesTypes } from "@/app/home/cafeteria/menu/types/platesType";
 import { usePathname } from "next/navigation";
-import { createContext, useContext, useEffect, useState } from "react";
-import { json } from "stream/consumers";
+import { createContext, useEffect, useState } from "react";
+import { PlatesTypes } from "../app/(routes)/home/cafeteria/menu/types/platesType";
 
 export const StoreContext = createContext({});
 
@@ -11,6 +10,9 @@ interface Props {
 }
 
 const StoreProvider = ({ children }: Props) => {
+  const [authNormal, setAuthNormal] = useState<boolean>(false);
+  const [authAdmin, setAuthAdmin] = useState<boolean>(false);
+
   const pathname = usePathname();
 
   const [sideBarOpened, setSideBarOpened] = useState<boolean>(false);
@@ -64,17 +66,18 @@ const StoreProvider = ({ children }: Props) => {
       setWidthScreen(window.innerWidth);
       // eslint-disable-next-line react-hooks/exhaustive-deps
       setHeightScreen(window.innerHeight);
+      setTextHeader("Cafeteria");
 
-      if (!pathname.includes("cafeteria")) {
-        setTextHeader(
-          localStorage.getItem("headerTitle")
-            ? JSON.parse(localStorage.getItem("headerTitle") || "{}")
-                .headerTitle
-            : ""
-        );
-      } else {
-        setTextHeader("cafeteria");
-      }
+      // if (!pathname.includes("cafeteria")) {
+      //   setTextHeader(
+      //     localStorage.getItem("headerTitle")
+      //       ? JSON.parse(localStorage.getItem("headerTitle") || "{}")
+      //           .headerTitle
+      //       : ""
+      //   );
+      // } else {
+      //   setTextHeader("cafeteria");
+      // }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -83,6 +86,10 @@ const StoreProvider = ({ children }: Props) => {
   return (
     <StoreContext.Provider
       value={{
+        authNormal,
+        setAuthNormal,
+        authAdmin,
+        setAuthAdmin,
         sideBarOpened,
         setSideBarOpened,
         textHeader,
@@ -109,11 +116,5 @@ const StoreProvider = ({ children }: Props) => {
     </StoreContext.Provider>
   );
 };
-
-// export const useStore = () => {
-//   return useContext<any>(StoreContext)[0];
-// };
-
-// export const useDispatch = () => useContext<any>(StoreContext)[1];
 
 export default StoreProvider;

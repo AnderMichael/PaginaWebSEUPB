@@ -1,6 +1,6 @@
 "use client";
 
-import LoginPage from "./auth/login/page";
+import LoginPage from "./(routes)/auth/login/page";
 
 const Home = () => {
   return (<>
