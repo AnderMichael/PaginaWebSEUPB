@@ -6,6 +6,9 @@ import { PlateInterface } from "@/models/plateModel";
 import { PlateCard } from "./components/PlateCard";
 import { Button } from "./components/Button";
 import { onValue, ref } from "@firebase/database";
+
+
+import { set as firebaseSet } from "firebase/database";
 import { DatabaseReference } from "firebase/database";
 import { realTimeDb } from "../../../../firestore/firebaseConnection";
 import ModalLoading from "../../../../modals/ModalLoading";
@@ -16,6 +19,9 @@ const AdminCafeteria = () => {
   const router = useRouter();
   const [refresh, setRefresh] = useState<boolean>(false);
   const updateReference:DatabaseReference = ref(realTimeDb, "plates/");
+
+  const closedRef: DatabaseReference = ref(realTimeDb, 'closed');
+  const [isCafeteriaClosed, setCafeteriaClosed] = useState<boolean>(false);
 
   useEffect(() => {
     if(typeof window !== undefined){
@@ -66,6 +72,20 @@ const AdminCafeteria = () => {
       };
     }
   }, [router]);
+
+  useEffect(() => {
+    const unsubscribe = onValue(closedRef, (snapshot) => {
+      setCafeteriaClosed(snapshot.val());
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Función para abrir/cerrar la cafetería
+  const toggleCafeteriaStatus = () => {
+    // Actualiza el valor en Firebase al opuesto del estado actual
+    firebaseSet(closedRef, !isCafeteriaClosed);
+  };
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errorFinded, setErrorFinded] = useState<boolean>(false);
@@ -181,6 +201,11 @@ const AdminCafeteria = () => {
                 Lista de Platillos
               </h1>
               <div className="flex min-[541px]:flex-row max-[541px]:flex-col max-[541px]:space-y-2 min-[541px]:space-x-4">
+                <Button
+                   action={toggleCafeteriaStatus}
+                   color="bg-[#0A8D76]"
+                   buttonText={isCafeteriaClosed ? "Abrir Cafetería Virtual" : "Cerrar Cafetería Virtual"}
+                />
                 <Button
                   action={goToReservedPlates}
                   color="bg-[#0A8D76]"

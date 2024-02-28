@@ -2,9 +2,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ListPlatesCards } from "./components/ListPlatesCards";
 import { StoreContext } from "@/store/StoreProvider";
+import { DatabaseReference, onValue, ref } from "firebase/database";
+import { realTimeDb } from "../../../../../firestore/firebaseConnection";
 
 export const MenuPage = () => {
   const context: any = useContext(StoreContext);
+  const [isCafeteriaClosed, setCafeteriaClosed] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -14,6 +17,17 @@ export const MenuPage = () => {
       context.setHeightScreen(window.innerHeight);
       context.setMenuPageHeight(window.innerHeight - 80 || 400);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // Referencia al atributo 'closed' en Firebase
+    const closedRef: DatabaseReference = ref(realTimeDb, 'closed');
+    const unsubscribe = onValue(closedRef, (snapshot) => {
+      const closed = snapshot.val();
+      setCafeteriaClosed(closed);
+    });
+
+    // Desuscribirse de la referencia al desmontar el componente
+    return () => unsubscribe();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -26,7 +40,11 @@ export const MenuPage = () => {
         >
           <h1 className="text-transparent text-4xl font-bold">Cafeteria</h1>
         </div>
-        <ListPlatesCards />
+        {isCafeteriaClosed ? (
+          <p className="text-4xl font-bold">Las reservas en la cafetería ya cerraron.</p>
+        ) : (
+          <ListPlatesCards />
+        )}
       </section>
     </main>
   );
