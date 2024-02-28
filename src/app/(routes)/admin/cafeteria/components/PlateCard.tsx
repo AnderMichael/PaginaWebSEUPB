@@ -15,6 +15,7 @@ interface Props {
 
 export const PlateCard = ({ plate, deleteAction }: Props) => {
   const {
+    id,
     plateName,
     platePrice,
     plateAvailable,
@@ -27,6 +28,12 @@ export const PlateCard = ({ plate, deleteAction }: Props) => {
 
   const biggerEqualThan: boolean = context.widthScreen >= 890;
   const smallerThan: boolean = context.widthScreen < 890;
+
+  const router = useRouter();
+
+  const editPlateData = () => {
+    router.push(`/admin/cafeteria/edit_dish/${id}`);
+  };
 
   const setPlateToDelete = () => {
     deleteAction(plate);
@@ -56,7 +63,7 @@ export const PlateCard = ({ plate, deleteAction }: Props) => {
             className={`flex ${
               smallerThan ? "w-[50%]" : "h-[50%]"
             } bg-[#E69424] items-center justify-center hover:opacity-80 text-white`}
-            onClick={() => alert('mondongo')}
+            onClick={() => editPlateData()}
           >
             <EditIcon />
           </button>
