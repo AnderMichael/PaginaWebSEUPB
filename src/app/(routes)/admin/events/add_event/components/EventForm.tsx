@@ -36,7 +36,7 @@ export default function EventForm() {
         setLoading(true);
         const posting = await postEventFS(response);
         if (!posting) {
-          router.replace("/events_admin?added");
+          router.back();
           setLoading(false);
         } else {
           setLoading(false);
@@ -46,7 +46,7 @@ export default function EventForm() {
         setLoading(false);
         setErrorFinded(true);
         console.error(err);
-        router.replace("/events_admin?error");
+        router.back();
       }
     }
   };

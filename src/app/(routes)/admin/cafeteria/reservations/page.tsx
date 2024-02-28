@@ -132,7 +132,8 @@ const ReservationPage = () => {
     plateFounded.plateQuantity += 1;
     updates[`/plates/${plateId}`] = plateFounded;
     await update(ref(realTimeDb), updates);
-    removeMyOrder(itemId);
+    console.log("🚀 ~ deleteOrder ~ `/reserved_plates/${plateId}`:", `/reserved_plates/${plateId}`)
+    await removeMyOrder(itemId);
   };
 
   const [entregado, setEntregado] = useState<boolean>(false);
