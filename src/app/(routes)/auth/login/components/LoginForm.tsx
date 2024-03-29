@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { StoreContext } from "../../../../../store/StoreProvider";
+import { loginWithEmailPassword } from "@/services/authServices";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -17,16 +18,17 @@ const LoginForm = () => {
 
   const [incorrect, setIncorrect] = useState(false);
 
-  const checkUser = (data: any) => {
+  const checkUser = async (data: any) => {
+    const loginRespose = await loginWithEmailPassword(data.email,data.password);
     if (
-      data.email === "cafe@upb.com" &&
-      data.password === "cafe1234"
+      data.email === "cafeteria@upb.seupb.com" &&
+      loginRespose.success
     ) {
       setAuthAdmin(true);
       router.push("/admin/cafeteria");
     } else if(
       data.email === "evento@upb.com" &&
-      data.password === "evento123"
+      loginRespose.success
     ){
       setAuthAdmin(true);
       router.push("/admin/events");

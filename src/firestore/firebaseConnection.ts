@@ -4,13 +4,13 @@ import { getFirestore } from "firebase/firestore";
 import { getDatabase, onValue, ref } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD4vKBbPJHyqf-nN_UkCID8ufIBsgpaeYY",
-  authDomain: "upb-web-app.firebaseapp.com",
-  projectId: "upb-web-app",
-  storageBucket: "upb-web-app.appspot.com",
-  messagingSenderId: "868750507346",
-  appId: "1:868750507346:web:d397098d4d9b54425fce8b",
-  measurementId: "G-PY97R1W47Z"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
 const gettingApp = () => {
