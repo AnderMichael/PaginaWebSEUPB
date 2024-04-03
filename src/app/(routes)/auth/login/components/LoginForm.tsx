@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { StoreContext } from "../../../../../store/StoreProvider";
 import { loginWithEmailPassword } from "@/services/authServices";
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -13,26 +14,27 @@ const LoginForm = () => {
     handleSubmit,
   } = useForm();
 
-  const context:any = useContext(StoreContext);
+  const context: any = useContext(StoreContext);
   const { setAuthNormal, setAuthAdmin } = context;
 
   const [incorrect, setIncorrect] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const checkUser = async (data: any) => {
-    const loginRespose = await loginWithEmailPassword(data.email,data.password);
+    const loginRespose = await loginWithEmailPassword(data.email, data.password);
     if (
       data.email === "cafeteria@upb.seupb.com" &&
       loginRespose.success
     ) {
       setAuthAdmin(true);
       router.push("/admin/cafeteria");
-    } else if(
+    } else if (
       data.email === "evento@upb.com" &&
       loginRespose.success
-    ){
+    ) {
       setAuthAdmin(true);
       router.push("/admin/events");
-    }else{
+    } else {
       setAuthAdmin(false);
       setIncorrect(true);
     }
@@ -86,12 +88,21 @@ const LoginForm = () => {
               Contraseña
             </label>
           </div>
-          <input
-            className=" bg-white text-gray-800 rounded-lg font-josefin"
-            placeholder="°°°°°°°°"
-            type="password"
-            {...register("password", { required: true, minLength: 8 })}
-          />
+          <div className="relative">
+            <input
+              className="bg-white text-gray-800 rounded-lg font-josefin font-light w-full"
+              placeholder="°°°°°°°°"
+              type={showPassword ? "text" : "password"}
+              {...register("password", { required: true, minLength: 8 })}
+            />
+            <button
+              type="button"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FiEyeOff /> : <FiEye />}
+            </button>
+          </div>
           {errors.password?.type === "required" && (
             <p className="text-red-700 mt-2 font-normal leading-relaxed font-jost ">
               * Debes introducir una contraseña
@@ -108,9 +119,9 @@ const LoginForm = () => {
             * El correo y la contraseña son incorrectos, introdúcelos de nuevo
           </p>
         )}
-        <button type="submit" className=" bg-[#63CCC5] hover:bg-green-700 p-2 rounded-xl text-white font-medium mt-5">Ingresar</button> 
+        <button type="submit" className=" bg-[#63CCC5] hover:bg-green-700 p-2 rounded-xl text-white font-medium mt-5">Ingresar</button>
       </form>
-      <button onClick={click} className=" bg-[#63CCC5] hover:bg-green-500 p-2 rounded-xl text-white font-medium">Ingresar como usuario</button> 
+      <button onClick={click} className=" bg-[#63CCC5] hover:bg-green-500 p-2 rounded-xl text-white font-medium">Ingresar como usuario</button>
 
     </div>
   );

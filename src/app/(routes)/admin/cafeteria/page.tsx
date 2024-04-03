@@ -83,7 +83,6 @@ const AdminCafeteria = () => {
 
   // Función para abrir/cerrar la cafetería
   const toggleCafeteriaStatus = () => {
-    // Actualiza el valor en Firebase al opuesto del estado actual
     firebaseSet(closedRef, !isCafeteriaClosed);
   };
 
