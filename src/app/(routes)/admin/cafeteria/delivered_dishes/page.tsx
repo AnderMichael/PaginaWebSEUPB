@@ -2,7 +2,7 @@
 import { ReservedModelBackend } from "@/models/reservedPlateModel";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
-import { DatabaseReference, onValue, ref, remove, update, set } from "firebase/database";
+import { DatabaseReference, onValue, ref, remove, update } from "firebase/database";
 import { PlatesTypes } from "../../../home/cafeteria/menu/types/platesType";
 import { realTimeDb } from "../../../../../firestore/firebaseConnection";
 import ModalLoading from "../../../../../modals/ModalLoading";
@@ -12,18 +12,15 @@ import ModalConfirmation from "../../../../../modals/ModalConfirmation";
 import ModalMessage from "../../../../../modals/ModalMessage";
 import ModalMessageWithButton from "../../../../../modals/ModalMessageWithButton";
 
-const ReservationPage = () => {
+const ReservedDishesPage = () => {
   const context: any = useContext(StoreContext);
-  const platesData: PlatesTypes[] = context.platesData;
+  const platesData:PlatesTypes[] = context.platesDSata;
   const router = useRouter();
   const [orders, setOrders] = useState<ReservedModelBackend[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
 
-  const updateReference: DatabaseReference = ref(realTimeDb, "reserved_plates/");
-  const platesUpdateReference: DatabaseReference = ref(realTimeDb, "plates/");
-  const deliveredDishesReference: DatabaseReference = ref(realTimeDb, "delivered_dishes/");
-
+  const updateReference: DatabaseReference = ref(realTimeDb, "delivered_dishes/");
 
   const getDataFromDB: () => Promise<void> = async () => {
     try {
@@ -88,23 +85,6 @@ const ReservationPage = () => {
         setOrders(valuesArray);
       });
 
-      onValue(platesUpdateReference, async (snapshot) => {
-        const data = await snapshot.val();
-        const valuesArray: PlatesTypes[] = Object.entries(data).map(
-          ([id, props]) => ({
-            id,
-            ...(props as {
-              plateName: string;
-              platePrice: number;
-              plateAvailable: boolean;
-              plateDescription: string;
-              plateImage: string;
-              plateQuantity: number;
-            }),
-          })
-        );
-        context.setPlatesData(valuesArray);
-      });
       setRefresh(!refresh);
     }, 1000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,26 +95,12 @@ const ReservationPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const removeMyOrder = async (itemId: string) => {
-    const orderToDeliver = orders.find(order => order.id === itemId);
-    if (!orderToDeliver) {
-      console.error('Order not found');
-      return;
-    }
-    const deliveredData = {
-      client_code: orderToDeliver.client_code,
-      client_name: orderToDeliver.client_name,
-      plate_name: orderToDeliver.plate_name,
-      plate_price: orderToDeliver.plate_price,
-    };
-
-    await remove(ref(realTimeDb, `reserved_plates/${itemId}`));
-    await set(ref(realTimeDb, `delivered_dishes/${itemId}`), deliveredData);
+  const removeMyOrder = async (itemId:string) => {
+    await remove(ref(realTimeDb, 'reserved_plates/' + itemId));
   };
 
-
-  const deleteOrder = async (itemId: string, plateId: string) => {
-    const plateFounded: any = { ...platesData.find((item: PlatesTypes) => item.id === plateId) } || {
+  const deleteOrder = async (itemId:string, plateId: string) => {
+    const plateFounded:any = {...platesData.find((item: PlatesTypes) => item.id === plateId)} || {
       id: "",
       plateName: "",
       platePrice: 0,
@@ -156,7 +122,7 @@ const ReservationPage = () => {
 
   const [orderPlateId, setOrderPlateId] = useState<string>('');
 
-  const [endEntregado, setEndEntregado] = useState<boolean>(false);
+  const [endEntregado, setEndEntregado]= useState<boolean>(false);
 
   return (
     <>
@@ -165,23 +131,19 @@ const ReservationPage = () => {
           <>
             {loading && <ModalLoading />}
             {entregado && <ModalConfirmation
-              actionOne={() => {
-                setEntregado(false); setLoading(true);
-                removeMyOrder(orderPlateId); 
-
-                setLoading(false); setEndEntregado(true);
-              }}
-              actionTwo={() => setEntregado(false)} title={"Entregar plato"}
-              message={"¿Desea entrega el plato?"} />}
+            actionOne={() => {setEntregado(false);setLoading(true);
+            removeMyOrder(orderPlateId);setLoading(false);setEndEntregado(true);}}
+            actionTwo={() => setEntregado(false)} title={"Entregar plato"}
+            message={"¿Desea entrega el plato?"}/>}
             {endEntregado && <ModalMessageWithButton action={() => setEndEntregado(false)}
-              title={"Plato Entregado"} message={"El plato a sido entregado correctamente"} />}
-          </>
+            title={"Plato Entregado"} message={"El plato a sido entregado correctamente"}/>}
+            </>
         </ModalPage>
       )}
       <div className="container mx-auto p-4 w-[70%]">
         <div className="flex justify-between items-center m-5">
           <h1 className="text-[#302E46] my-5 text-left  text-4xl font-black font-jost ">
-            Reservas para Hoy
+            Reservas Entregadas
           </h1>
           <button
             onClick={() => router.back()}
@@ -206,12 +168,6 @@ const ReservationPage = () => {
                 <th scope="col" className="px-6 py-3 text-center">
                   Precio
                 </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  Hora de Reserva
-                </th>
-                <th colSpan={2} className="px-6 py-3 text-center">
-                  Acciones
-                </th>
               </tr>
             </thead>
             <tbody>
@@ -235,29 +191,6 @@ const ReservationPage = () => {
                     <td className="text-black text-center px-4 py-2">
                       {order.plate_price}
                     </td>
-                    <td className="text-black text-center px-4 py-2">
-                      {order.client_schedule}
-                    </td>
-                    <td className="text-black text-center px-4 py-2">
-                      <button onClick={() => {
-                        setOrderPlateId(order.id);
-                        setEntregado(true);
-                      }}>
-                        <div className={`h-5 w-5 ${entregado ? 'text-[#1A4E1C]' : 'text-blue-500'} hover:text-[#173518]`}>
-                          {entregado ? 'Entregado' : 'Entregar'}
-                        </div>
-                      </button>
-                    </td>
-                    <td className="text-black text-center px-4 py-2">
-                      <button
-                        onClick={() => deleteOrder(order.id, order.plate_id)}
-                      >
-                        <span className="h-5 w-5 text-red-500 hover:text-red-700">
-                          {" "}
-                          Eliminar
-                        </span>
-                      </button>
-                    </td>
                   </tr>
                 ))}
             </tbody>
@@ -268,4 +201,4 @@ const ReservationPage = () => {
   );
 };
 
-export default ReservationPage;
+export default ReservedDishesPage;

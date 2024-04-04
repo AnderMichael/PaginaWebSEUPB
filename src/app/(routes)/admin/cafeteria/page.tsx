@@ -18,13 +18,13 @@ import ModalPage from "../../../../modals/ModalPage";
 const AdminCafeteria = () => {
   const router = useRouter();
   const [refresh, setRefresh] = useState<boolean>(false);
-  const updateReference:DatabaseReference = ref(realTimeDb, "plates/");
+  const updateReference: DatabaseReference = ref(realTimeDb, "plates/");
 
   const closedRef: DatabaseReference = ref(realTimeDb, 'closed');
   const [isCafeteriaClosed, setCafeteriaClosed] = useState<boolean>(false);
 
   useEffect(() => {
-    if(typeof window !== undefined){
+    if (typeof window !== undefined) {
       const queryParams = new URLSearchParams(window.location.search);
       if (queryParams.has("added")) {
         queryParams.delete("added");
@@ -110,7 +110,7 @@ const AdminCafeteria = () => {
         );
         setPlates(valuesArray);
         setLoading(false);
-        }
+      }
       );
     } catch (error) {
       console.error(error);
@@ -131,7 +131,6 @@ const AdminCafeteria = () => {
   };
 
   const goToAddDish = () => {
-    console.log("añadir");
     router.push("/admin/cafeteria/add_dish");
   };
 
@@ -164,28 +163,28 @@ const AdminCafeteria = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const typeBoolean:boolean = loading || errorFinded;
+  const typeBoolean: boolean = loading || errorFinded;
 
   return (
     <>
-    {
-      (typeBoolean) && (
-        <ModalPage>
-          <>
-          {
-            loading && (
-              <ModalLoading/>
-            )
-          }
-          {
-            errorFinded && (
-              <ModalMessage title={"Error 404!"} message={"Page not finded"}/>
-            )
-          }
-          </>
-        </ModalPage>
-      )
-    }
+      {
+        (typeBoolean) && (
+          <ModalPage>
+            <>
+              {
+                loading && (
+                  <ModalLoading />
+                )
+              }
+              {
+                errorFinded && (
+                  <ModalMessage title={"Error 404!"} message={"Page not finded"} />
+                )
+              }
+            </>
+          </ModalPage>
+        )
+      }
       :
       {!loading && !errorFinded && (
         <div className="flex absolute inset-0">
@@ -195,15 +194,20 @@ const AdminCafeteria = () => {
                 Actualizar Menú
               </h1>
             </div>
-            <div className="flex h-[15%] items-center justify-between px-7 shadow-lg">
+            <div className="flex h-auto items-center justify-between px-7 shadow-lg py-6">
               <h1 className="text-orange-700 min-[541px]:text-2xl max-[541px]:text-sm font-bold">
                 Lista de Platillos
               </h1>
               <div className="flex min-[541px]:flex-row max-[541px]:flex-col max-[541px]:space-y-2 min-[541px]:space-x-4">
                 <Button
-                   action={toggleCafeteriaStatus}
-                   color="bg-[#0A8D76]"
-                   buttonText={isCafeteriaClosed ? "Abrir Cafetería Virtual" : "Cerrar Cafetería Virtual"}
+                  action={toggleCafeteriaStatus}
+                  color="bg-[#0A8D76]"
+                  buttonText={isCafeteriaClosed ? "Abrir Cafetería Virtual" : "Cerrar Cafetería Virtual"}
+                />
+                <Button
+                  action={() => router.push("/admin/cafeteria/delivered_dishes")}
+                  color="bg-[#0A8D76]"
+                  buttonText="Reservas Entregadas"
                 />
                 <Button
                   action={goToReservedPlates}
@@ -218,7 +222,7 @@ const AdminCafeteria = () => {
               </div>
             </div>
             <div className="flex flex-col items-center overflow-y-auto h-[80%]">
-              {plates.length!==0 ? <>
+              {plates.length !== 0 ? <>
                 {
                   plates.map((plate: PlateInterface, index: number) => (
                     <PlateCard key={index} plate={plate} deleteAction={promptToDelete} />
